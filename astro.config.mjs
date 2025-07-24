@@ -8,7 +8,10 @@ import partytown from '@astrojs/partytown'
 export default defineConfig({
   site: 'https://samubiscaro.github.io',
   //base: 'my-repo',
-  integrations: [mdx(), sitemap(), tailwind()]
+  integrations: [mdx(), sitemap(), tailwind(), partytown({
+    config: {
+      forward: ["dataLayer.push"],
+    },]
 })
 
 //export default defineConfig({
