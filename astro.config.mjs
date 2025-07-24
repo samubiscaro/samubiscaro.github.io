@@ -11,14 +11,6 @@ export default defineConfig({
   integrations: [mdx(), sitemap(), tailwind(), partytown({
     config: {
       forward: ["dataLayer.push"],
-    },]
-})
-
-//export default defineConfig({
-  site: 'https://astrofy-template.netlify.app',
-  
-  integrations: [mdx(), sitemap(), tailwind(), partytown({
-    config: {
-      forward: ["dataLayer.push"],
     },
+  }), ],
 });
