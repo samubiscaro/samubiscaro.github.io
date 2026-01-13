@@ -10,6 +10,55 @@ const last_posts = posts.slice(0, 3);
 ---
 
 <BaseLayout sideBarActiveItemID="home">
+  <div class="pb-12 mt-5">
+    <div class="flex flex-col-reverse md:flex-row items-center justify-between">
+      <div class="max-w-2xl">
+        <h1 class="text-5xl font-extrabold tracking-tight mb-2">Samuele Biscaro</h1>
+        <h2 class="text-primary text-2xl font-semibold opacity-90">
+          Mathematics Master's Student @ SNS & UNIPI
+        </h2>
+        <div class="py-6 text-lg leading-relaxed">
+          <p>
+            Welcome to my webpage ! :)
+            <br><br>
+            Hi, I’m Samuele, a mathematics student currently pursuing a Master's degree at the 	<b>Scuola Normale Superiore (SNS)</b> and the <b>University of Pisa (UNIPI)</b>.
+            <br>
+            On this website, you’ll find an evolving collection of my projects and materials I’ve gathered throughout my studies
+          </p>
+          <p class="mt-4">
+            On this website, you’ll find an evolving collection of my projects and materials I’ve gathered throughout my studies. 
+          </p>
+        </div>
+      </div>
+      </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+      <a href="/projects" class="btn btn-outline btn-primary text-lg capitalize">View Projects</a>
+      <a href="/notes" class="btn btn-outline btn-primary text-lg capitalize">Study Notes</a>
+      <!-- 
+      <a href="/teaching" class="btn btn-outline btn-primary text-lg capitalize">Teaching / TA</a>
+      -->
+    </div>
+
+    <div class="divider my-10"></div>
+
+    <div class="bg-base-200 p-6 rounded-xl border border-base-300">
+      <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        Get in touch
+      </h3>
+      <p class="text-lg">
+        Email:
+        <a href="mailto:samuele.biscaro@sns.it" class="link link-primary font-mono ml-2">samuele.biscaro@sns.it</a>
+      </p>
+    </div>
+
+  </div>
+</BaseLayout>
+
+<!-- 
+
+<BaseLayout sideBarActiveItemID="home">
     <div class="pb-12 mt-5">
     <div><h1 class="text-5xl font-bold">Samuele Biscaro</h1></div>
 
@@ -30,3 +79,5 @@ const last_posts = posts.slice(0, 3);
 
   </div>
 </BaseLayout>
+
+-->
