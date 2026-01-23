@@ -1,10 +1,10 @@
 ---
 /* Fictitious data for design preview */
 const dummySong = {
-  title: "The Goldberg Variations",
-  artist: "Johann Sebastian Bach",
+  title: "Ti Aspetto",
+  artist: "Ele A",
   albumArt: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Johann_Sebastian_Bach.jpg/640px-Johann_Sebastian_Bach.jpg",
-  songUrl: "https://en.wikipedia.org/wiki/Goldberg_Variations",
+  songUrl: "https://genius.com/Ele-a-ti-aspetto-lyrics",
   isPlaying: true
 };
 ---
@@ -73,9 +73,15 @@ const dummySong = {
 
 
 {dummySong.isPlaying && (
-    <div class="flex flex-col gap-0 px-2 py-4 border-t border-base-300">
+  <a 
+    href={dummySong.songUrl} 
+    target="_blank" 
+    rel="noopener noreferrer"
+    class="group flex flex-col gap-0 px-2 py-4 border-t border-base-300 transition-all hover:bg-base-300/50"
+    id="spotify-link"
+  >
     <span class="text-[9px] uppercase tracking-[0.2em] font-bold opacity-40 mb-1">
-        Now Playing
+      Now Playing
     </span>
 
     <div class="flex items-center justify-between gap-2 min-w-0">
@@ -95,6 +101,7 @@ const dummySong = {
         </div>
     </div>
     </div>
+  </a>
 )}
 
 <style>
@@ -103,6 +110,8 @@ const dummySong = {
     50% { height: 100%; }
   }
 </style>
+
+<!--
 
 {dummySong.isPlaying && (
   <div id="spotify-container" class="flex flex-col gap-0 px-2 py-4 border-t border-base-300 transition-opacity duration-500">
@@ -166,3 +175,5 @@ const dummySong = {
     </div>
   </a>
 )}
+
+-->
