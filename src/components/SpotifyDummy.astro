@@ -73,31 +73,41 @@ const dummySong = {
 
 
 {dummySong.isPlaying && (
+  
   <a 
     href={dummySong.songUrl} 
     target="_blank" 
     rel="noopener noreferrer"
-    class="group flex flex-col gap-0 px-2 py-4 border-t border-base-300 transition-all hover:bg-base-300/50"
+    class="group flex flex-col gap-0 px-2 py-4 border-t border-base-300 transition-all hover:bg-base-300/50 hover:rounded-xl"
     id="spotify-link"
   >
     <span class="text-[9px] uppercase tracking-[0.2em] font-bold opacity-40 mb-1">
       Now Playing
     </span>
 
-    <div class="flex items-center justify-between gap-2 min-w-0">
-        <div class="flex flex-col min-w-0 flex-1">
-        <span class="text-sm font-semibold truncate text-base-content opacity-90 leading-tight">
-            {dummySong.title}
-        </span>
-        <span class="text-[11px] opacity-60 truncate italic">
-            {dummySong.artist}
-        </span>
+    <div class="flex items-center justify-between gap-3 min-w-0">
+        
+        <div class="relative flex-shrink-0">
+            <img 
+              src={dummySong.albumArt} 
+              alt="Album art" 
+              class="w-10 h-10 rounded-md object-cover shadow-sm group-hover:shadow-md transition-shadow"
+            />
+          </div>
+        
+        <div class="flex flex-col min-w-0 flex-1">  
+          <span class="text-sm font-semibold text-base-content opacity-90 leading-tight group-hover:text-primary transition-colors">
+              {dummySong.title}
+          </span>
+          <span class="text-[11px] opacity-60 italic">
+              {dummySong.artist}
+          </span>
         </div>
 
         <div class="flex gap-[2px] items-end h-3 w-4 flex-shrink-0 mb-1">
-        <div class="w-[2.5px] bg-primary animate-[music-bar_0.8s_ease-in-out_infinite]"></div>
-        <div class="w-[2.5px] bg-primary animate-[music-bar_1.2s_ease-in-out_infinite]"></div>
-        <div class="w-[2.5px] bg-primary animate-[music-bar_1.0s_ease-in-out_infinite]"></div>
+          <div class="w-[2.5px] bg-primary animate-[music-bar_0.8s_ease-in-out_infinite]"></div>
+          <div class="w-[2.5px] bg-primary animate-[music-bar_1.2s_ease-in-out_infinite]"></div>
+          <div class="w-[2.5px] bg-primary animate-[music-bar_1.0s_ease-in-out_infinite]"></div>
         </div>
     </div>
     </div>
