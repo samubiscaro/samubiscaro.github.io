@@ -1,0 +1,183 @@
+
+<div id="spotify-container" transition:persist class="hidden">
+  <a 
+    href="spotify-url" 
+    target="_blank" 
+    rel="noopener noreferrer"
+    class="group flex flex-col gap-0 px-2 py-2 border-t border-base-300 transition-all hover:bg-base-300/50 hover:rounded-xl"
+    id="spotify-link-element"
+  >
+    <span class="text-[9px] uppercase tracking-[0.2em] font-bold opacity-40 mb-1">
+      Now Playing
+    </span>
+
+    <div class="flex items-center justify-between gap-3 min-w-0">
+        
+      <img id="spotify-art" src="" class="w-10 h-10 rounded-md object-cover shadow-sm group-hover:shadow-md transition-shadow" />
+        
+      <div class="flex flex-col min-w-0 flex-1">  
+        <span id="spotify-title" class="text-sm font-semibold text-base-content opacity-90 leading-tight group-hover:text-primary transition-colors mb-0.5 line-clamp-2"></span>
+        <span id="spotify-artist" class="text-[11px] opacity-60 italic leading-tight line-clamp-2"></span>
+      </div>
+
+      <div class="flex gap-[2px] items-end h-3 w-4 flex-shrink-0 mb-1">
+        <div class="w-[2.5px] bg-primary animate-[music-bar_0.8s_ease-in-out_infinite]"></div>
+        <div class="w-[2.5px] bg-primary animate-[music-bar_1.2s_ease-in-out_infinite]"></div>
+        <div class="w-[2.5px] bg-primary animate-[music-bar_1.0s_ease-in-out_infinite]"></div>
+      </div>
+
+    </div>
+  </a>
+</div>
+
+<style>
+
+  #spotify-container {
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s ease;
+    opacity: 0;
+  }
+  
+  /* Quando il widget è attivo e visibile */
+  #spotify-container.is-visible {
+    opacity: 1;
+  }
+  
+  /* Quando è nascosto lo vogliamo anche trasparente */
+  #spotify-container.hidden {
+    display: none; /* Tailwind lo gestisce già, ma per sicurezza */
+  }
+
+  @keyframes music-bar {
+    0%, 100% { height: 25%; }
+    50% { height: 100%; }
+  }
+
+</style>
+
+<script>
+  // Usiamo una funzione che può essere chiamata ripetutamente
+  async function updateSpotify() {
+    const container = document.getElementById('spotify-container');
+    const art = document.getElementById('spotify-art') as HTMLImageElement;
+    const title = document.getElementById('spotify-title');
+    const artist = document.getElementById('spotify-artist');
+    const link = document.getElementById('spotify-link-element') as HTMLAnchorElement;
+
+    // --- CONFIGURAZIONE ---
+    const MOCK_MODE = false; // Testa in locale con dati finti
+    const VERCEL_URL = 'https://spotify-bridge.vercel.app/api/now-playing.js';
+    // ----------------------
+
+    if (!container || !art || !title || !artist || !link) return;
+
+    try {
+      let data;
+
+      if (MOCK_MODE) {
+        // Simuliamo la risposta dell'API in locale
+        data = {
+          isPlaying: true,
+          title: "Ti Aspetto",
+          artist: "Ele A",
+          albumArt: "#",
+          songUrl: "#"
+        };
+      } else {
+        const res = await fetch(VERCEL_URL);
+        if (!res.ok) throw new Error('Network error');
+        data = await res.json();
+      }
+
+      if (data.isPlaying) {
+        container.classList.remove('hidden');
+        // 1. Inizia il Fade Out (se era già visibile e il titolo è diverso)
+        if (title.innerText !== data.title) {
+          container.classList.remove('is-visible');
+          
+          // Aspetta che sparisca (300ms) prima di cambiare i testi
+          setTimeout(() => {
+            title.innerText = data.title;
+            artist.innerText = data.artist;
+            link.href = data.songUrl;
+            if (data.albumArt) {
+              art.src = data.albumArt;
+              art.classList.remove('hidden');
+            } else {
+              art.classList.add('hidden');
+            }
+            
+            // 2. Torna visibile (Fade In) con i nuovi dati
+            container.classList.add('is-visible');
+          }, 600); 
+        } else {
+          // Se è la prima volta che carica, mostralo e basta
+          title.innerText = data.title;
+          artist.innerText = data.artist;
+          link.href = data.songUrl;
+          art.src = data.albumArt;
+          container.classList.add('is-visible');
+        }
+      } else {
+        container.classList.remove('is-visible');
+        setTimeout(() => container.classList.add('hidden'), 600);
+      }
+    } catch (e) {
+      console.error("Spotify Widget Error:", e);
+      container.classList.add('hidden');
+    }
+  }
+
+  // 1. Esegui al primo caricamento
+  updateSpotify();
+
+  // 2. Esegui ogni volta che Astro cambia pagina (fondamentale per Astrofy)
+  // document.addEventListener('astro:after-swap', updateSpotify);
+
+  // 3. Aggiornamento periodico
+  setInterval(updateSpotify, 30000);
+</script>
+
+<!--
+<script>
+  async function updateSpotify() {
+    const container = document.getElementById('spotify-container');
+    const art = document.getElementById('spotify-art') as HTMLImageElement;
+    const title = document.getElementById('spotify-title');
+    const artist = document.getElementById('spotify-artist');
+    const link = document.getElementById('spotify-link-element') as HTMLAnchorElement;
+    // SOSTITUISCI CON IL TUO URL DI VERCEL UNA VOLTA DEPLOYATO
+    const VERCEL_URL = 'https://test-spotify.free.beeceptor.com/api/now-playing';
+
+    // Se il container non esiste ancora, esci silenziosamente
+    if (!container ||!art || !title || !artist || !link) return;
+
+    try {
+      const res = await fetch(VERCEL_URL);
+      const data = await res.json();
+
+      if (data.isPlaying) {
+        container.classList.remove('hidden');
+        if (data.albumArt) {
+          art.src = data.albumArt;
+          art.classList.remove('hidden');
+        } else {
+          // Se non c'è, nascondi l'elemento <img>
+          art.classList.add('hidden');
+        }
+        art.src = data.albumArt;
+        title.innerText = data.title;
+        artist.innerText = data.artist;
+        link.href = data.songUrl;
+      } else {
+        container.classList.add('hidden');
+      }
+    } catch (e) {
+      console.error("Spotify Widget Error", e);
+    }
+  }
+
+  // Aggiorna ogni 30 secondi
+  updateSpotify();
+  setInterval(updateSpotify, 30000);
+</script>
+-->

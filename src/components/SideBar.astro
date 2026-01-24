@@ -2,7 +2,8 @@
 import SideBarFooter from "./SideBarFooter.astro";
 import { Image } from "astro:assets";
 import SideBarMenu from "./SideBarMenu.astro";
-import SpotifyDummy from "./SpotifyDummy.astro";
+import SpotifyWidget from "./SpotifyWidget.astro";
+
 const { sideBarActiveItemID } = Astro.props;
 ---
 
@@ -21,7 +22,7 @@ const { sideBarActiveItemID } = Astro.props;
     <SideBarMenu sideBarActiveItemID={sideBarActiveItemID} />
     
     <div class="mt-auto px-4 mb-2">
-      <SpotifyDummy />
+      <SpotifyWidget />
     </div>
 
     <SideBarFooter />
