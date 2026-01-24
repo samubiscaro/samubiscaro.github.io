@@ -7,16 +7,25 @@
     class="group flex flex-col gap-0 px-2 py-2 border-t border-base-300 transition-all hover:bg-base-300/50 hover:rounded-xl"
     id="spotify-link-element"
   >
-    <span class="text-[9px] uppercase tracking-[0.2em] font-bold opacity-40 mb-1">
-      Now Playing
-    </span>
+    <div class="flex items-center justify-between mb-1">
+      <span class="text-[9px] uppercase tracking-[0.2em] font-bold opacity-40 leading-none">
+        Now Playing
+      </span>
+      <svg 
+        class="w-3 h-3 text-base-content opacity-20 group-hover:opacity-100 group-hover:text-primary transition-all duration-300"
+        viewBox="0 0 24 24" 
+        fill="currentColor"
+      >
+        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.491 17.306c-.215.353-.671.463-1.025.249-2.813-1.718-6.353-2.107-10.521-1.153-.404.092-.808-.159-.9-.563-.092-.403.159-.808.563-.9 4.557-1.042 8.475-.603 11.614 1.312.353.214.464.671.249 1.025zm1.467-3.259c-.27.439-.844.582-1.283.312-3.219-1.977-8.126-2.551-11.933-1.396-.491.148-1.001-.133-1.149-.624-.148-.492.133-1.002.624-1.15 4.356-1.321 9.771-.676 13.449 1.581.439.27.583.844.312 1.283zm.126-3.411c-3.858-2.291-10.231-2.502-13.94-1.376-.591.18-1.214-.157-1.394-.748-.18-.591.157-1.214.748-1.394 4.254-1.291 11.291-1.043 15.72 1.586.532.316.704 1.004.388 1.536-.316.532-1.004.704-1.536.388z"/>
+      </svg>
+    </div>
 
     <div class="flex items-center justify-between gap-3 min-w-0">
         
       <img id="spotify-art" src="" class="w-10 h-10 rounded-md object-cover shadow-sm group-hover:shadow-md transition-shadow" />
         
       <div class="flex flex-col min-w-0 flex-1">  
-        <span id="spotify-title" class="text-sm font-semibold text-base-content opacity-90 leading-tight group-hover:text-primary transition-colors mb-0.5 line-clamp-2"></span>
+        <span id="spotify-title" class="text-sm font-semibold text-base-content opacity-90 leading-tight group-hover:text-primary transition-all duration-300 mb-0.5 line-clamp-2"></span>
         <span id="spotify-artist" class="text-[11px] opacity-60 italic leading-tight line-clamp-2"></span>
       </div>
 
