@@ -1,5 +1,5 @@
 
-<div id="spotify-container" transition:persist class="hidden">
+<div id="spotify-container" transition:persist>
   <a 
     href="spotify-url" 
     target="_blank" 
@@ -20,9 +20,9 @@
       </svg>
     </div>
 
-    <div class="flex items-center justify-between gap-3 min-w-0">
+    <div id="spotify-content"  class="flex items-center justify-between gap-3 min-w-0" >
         
-      <img id="spotify-art" src="" class="w-10 h-10 rounded-md object-cover shadow-sm group-hover:shadow-md transition-shadow" />
+      <img id="spotify-art" width="40" height="40" src="" class="w-10 h-10 rounded-md object-cover shadow-sm group-hover:shadow-md transition-shadow" />
         
       <div class="flex flex-col min-w-0 flex-1">  
         <span id="spotify-title" class="text-sm font-semibold text-base-content opacity-90 leading-tight group-hover:text-primary transition-all duration-300 mb-0.5 line-clamp-2"></span>
@@ -42,16 +42,27 @@
 <style>
 
   #spotify-container {
-    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s ease;
+    transition: opacity 0.4s ease-in-out, transform 0.8s ease, height 0.5s ease;
     opacity: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+    contain: layout;
   }
-  
-  /* Quando il widget è attivo e visibile */
+
   #spotify-container.is-visible {
     opacity: 1;
   }
   
-  /* Quando è nascosto lo vogliamo anche trasparente */
+  /* Fade tra le canzoni */
+  #spotify-content {
+    opacity: 1;
+    transition: opacity 0.4s ease-in-out;
+  }
+
+  #spotify-content.fade-out {
+    opacity: 0;
+  }
+
   #spotify-container.hidden {
     display: none; /* Tailwind lo gestisce già, ma per sicurezza */
   }
@@ -64,66 +75,101 @@
 </style>
 
 <script>
+
+function updateDOM(data) {
+  // Selezioniamo gli elementi
+  const art = document.getElementById('spotify-art') as HTMLImageElement;
+  const title = document.getElementById('spotify-title');
+  const artist = document.getElementById('spotify-artist');
+  const link = document.getElementById('spotify-link-element') as HTMLAnchorElement;
+
+  if (!art || !title || !artist || !link) return;
+
+  // Iniettiamo i nuovi dati
+  title.innerText = data.title;
+  artist.innerText = data.artist;
+  link.href = data.songUrl;
+  
+  // Gestiamo l'immagine: se c'è la mostriamo, altrimenti la nascondiamo
+  if (data.albumArt) {
+
+    // 1. Prima di tutto nascondiamo, così non vedo l'errore se il link è rotto
+    art.classList.add('hidden'); 
+    
+    // 2. Definisci cosa fare SE carica correttamente
+    art.onload = () => {
+      art.classList.remove('hidden');
+    };
+
+    // 3. Definisci cosa fare SE fallisce (resta nascosta)
+    art.onerror = () => {
+      art.classList.add('hidden');
+      art.src = ""; // Pulisce il src per sicurezza
+    };
+
+    // 4. SOLO ORA assegna il link
+    art.src = data.albumArt;
+
+  } else {
+    art.classList.add('hidden');
+    art.src = "";
+  }
+
+}
+
   // Usiamo una funzione che può essere chiamata ripetutamente
   async function updateSpotify() {
     const container = document.getElementById('spotify-container');
+    const content = document.getElementById('spotify-content');
     const art = document.getElementById('spotify-art') as HTMLImageElement;
     const title = document.getElementById('spotify-title');
     const artist = document.getElementById('spotify-artist');
     const link = document.getElementById('spotify-link-element') as HTMLAnchorElement;
 
     // --- CONFIGURAZIONE ---
-    const MOCK_MODE = false; // Testa in locale con dati finti
     const VERCEL_URL = 'https://spotify-bridge.vercel.app/api/now-playing.js';
     // ----------------------
 
-    if (!container || !art || !title || !artist || !link) return;
+    if (!container || !art || !title || !artist || !link || !content) return;
 
     try {
-      let data;
 
-      if (MOCK_MODE) {
-        // Simuliamo la risposta dell'API in locale
-        data = {
-          isPlaying: true,
-          title: "Ti Aspetto",
-          artist: "Ele A",
-          albumArt: "#",
-          songUrl: "#"
-        };
-      } else {
-        const res = await fetch(VERCEL_URL);
-        if (!res.ok) throw new Error('Network error');
-        data = await res.json();
-      }
+      const res = await fetch(VERCEL_URL);
+      if (!res.ok) throw new Error('Network error');
+      const data = await res.json();
 
       if (data.isPlaying) {
-        container.classList.remove('hidden');
-        // 1. Inizia il Fade Out (se era già visibile e il titolo è diverso)
-        if (title.innerText !== data.title) {
-          container.classList.remove('is-visible');
+
+        if (container.classList.contains('hidden')) {
+          updateDOM(data); // Inseriamo i dati prima di mostrarlo
+          container.classList.remove('hidden'); // Lo rendiamo disponibile al DOM
           
-          // Aspetta che sparisca (300ms) prima di cambiare i testi
-          setTimeout(() => {
-            title.innerText = data.title;
-            artist.innerText = data.artist;
-            link.href = data.songUrl;
-            if (data.albumArt) {
-              art.src = data.albumArt;
-              art.classList.remove('hidden');
-            } else {
-              art.classList.add('hidden');
-            }
-            
-            // 2. Torna visibile (Fade In) con i nuovi dati
+          // Questa riga sembra inutile ma è il segreto: "legge" l'altezza per obbligare
+          // il browser a registrare che ora l'elemento esiste prima di animarlo.
+          void container.offsetWidth; 
+
+          // 4. Ora attiviamo l'opacità
+          container.classList.add('is-visible');
+        }
+        
+        // 1. Inizia il Fade Out (se era già visibile e il titolo è diverso)
+        else if (title.innerText !== data.title) {
+
+          content.classList.add('fade-out'); // Svanisce solo il contenuto interno
+      
+          setTimeout(async () => {
+            // Aggiorna i dati mentre è invisibile
+            updateDOM(data); 
+
             container.classList.add('is-visible');
-          }, 600); 
+            content.classList.remove('fade-out'); // Ritorna visibile
+
+            content.classList.remove('fade-out'); // Ritorna visibile
+            
+          }, 400);
+
         } else {
-          // Se è la prima volta che carica, mostralo e basta
-          title.innerText = data.title;
-          artist.innerText = data.artist;
-          link.href = data.songUrl;
-          art.src = data.albumArt;
+          updateDOM(data);
           container.classList.add('is-visible');
         }
       } else {
