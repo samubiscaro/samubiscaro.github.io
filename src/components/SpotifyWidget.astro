@@ -182,14 +182,29 @@ function updateDOM(data) {
     }
   }
 
+  // Funzione che controlla se la pagina è visibile
+  function updateWithVisibilityCheck() {
+    // Se l'utente ha cambiato scheda o ha minimizzato il browser, non fare nulla
+    if (document.hidden) {
+      console.log("Widget in pausa: la scheda non è visibile");
+      return;
+    }
+    updateSpotify();
+  }
+
   // 1. Esegui al primo caricamento
   updateSpotify();
 
-  // 2. Esegui ogni volta che Astro cambia pagina (fondamentale per Astrofy)
-  // document.addEventListener('astro:after-swap', updateSpotify);
+  // 2. Aggiornamento periodico
+  setInterval(updateWithVisibilityCheck, 30000);
 
-  // 3. Aggiornamento periodico
-  setInterval(updateSpotify, 30000);
+  // 3. Aggiorna quando l'utente ritorna alla scheda
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+      updateSpotify();
+    }
+  });
+  
 </script>
 
 <!--
