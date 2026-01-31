@@ -1,0 +1,22 @@
+---
+import { getCollection } from "astro:content";
+import ProjectLayout from "../../layouts/ProjectLayout.astro"; // Ensure this path is correct
+
+// 1. Generate a new path for every project file
+export async function getStaticPaths() {
+  const projectEntries = await getCollection("projects", ({ data }) => {
+        return data.draft !== true;
+    });
+  return projectEntries.map(entry => ({
+    params: { slug: entry.slug }, props: { entry },
+  }));
+}
+
+// 2. Get the specific project data
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<ProjectLayout {...entry.data}>
+  <Content />
+</ProjectLayout>
