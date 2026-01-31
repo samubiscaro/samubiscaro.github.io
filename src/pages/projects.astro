@@ -1,6 +1,11 @@
 ---
+import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import HorizontalCard from "../components/HorizontalCard.astro";
+
+const projects = (await getCollection("projects")).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
 ---
 
 <BaseLayout title = "Projects" sideBarActiveItemID="projects">
@@ -8,33 +13,19 @@ import HorizontalCard from "../components/HorizontalCard.astro";
     <div><h1 class="text-4xl font-bold mb-5 text-primary">PROJECTS</h1></div>
   </div>
 
-
-  
-  <HorizontalCard
-      title="Heine Borel in Lean"
-      img="/hbimg.webp"
-      desc="A formalization using LEAN of the Heine-Borel theorem for metric spaces, developed as the final exam project for MAT740. The constraint was to avoid Mathlib.Topology, requiring the construction of all topological foundations entirely from scratch."
-      url="https://github.com/samubiscaro/heine-borel"
-      badge="NEW"
-    />
-
-  <div class="divider my-0"></div>
-
-  <HorizontalCard
-    title="Analysis on Gaussian Spaces seminar"
-    img="/AnalGauss.svg"
-    desc="In this seminar we study the infinite-dimensional generalization of the Malliavin derivative, and its link to stochastic analysis (in italian)."
-    url="https://drive.google.com/file/d/14i2yctu1kZDdWOtmhbynCft3XEACtyKn/view?usp=sharing"
-  />
-  <!-- 
-      badge="NEW" 
-    -->
-  <div class="divider my-0"></div>
-  <HorizontalCard
-    title="Bachelor Thesis"
-    
-    desc="My thesis, 'A Non-Commutative Extension of the Sewing Lemma and its Applications for Quantum Mechanics', supervised by Prof. Dario Trevisan, gives a generalization of the Sewing Lemma for non-commutative systems and studies its use in quantum evolution."
-    url="https://drive.google.com/file/d/1qlOKCqaVecncnn3TfFgdKbPsV0rAwVRO/view"
-  />
+  {
+    projects.map((project) => (
+      <>
+        <HorizontalCard
+          title={project.data.title}
+          img={project.data.heroImage}
+          desc={project.data.description}
+          url={project.data.url}
+          badge={project.data.badge}
+        />
+        <div class="divider my-0" />
+      </>
+    ))
+  }
 
 </BaseLayout>
