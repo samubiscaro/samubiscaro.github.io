@@ -2,11 +2,21 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<BaseLayout title = "404: Not Found" includeSidebar={false}>
-  <div class="text-center">
+<BaseLayout title="404: Not Found" includeSidebar={false}>
+  <div class="flex flex-col items-center justify-center min-h-[70vh] text-center px-4">
     <h1 class="text-9xl font-bold mb-4">☃️</h1>
-    <h1 class="text-9xl font-bold mb-2">404</h1>
-    <h3 class="text-2xl">The page you're looking for couldn't be found.</h3>
-    <a class="btn btn-accent mt-9" href="/">Back to the Home</a>
+    
+    <h1 class="text-9xl font-bold mb-2 text-primary">404</h1>
+    
+    <div class="max-w-md">
+      <h3 class="text-2xl font-semibold mb-4">
+        Error: Page Not Found
+      </h3>
+      <p class="text-lg opacity-80 mb-8">
+        The requested element does not belong to the set of pages of this website.
+      </p>
+      
+      <a class="btn btn-outline btn-primary text-lg capitalize" href="/">Back to the Home</a>
+    </div>
   </div>
 </BaseLayout>
