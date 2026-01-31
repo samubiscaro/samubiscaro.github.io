@@ -28,33 +28,4 @@ const projects = (await getCollection("projects")).sort(
     ))
   }
 
-
-  
-  <HorizontalCard
-      title="Heine Borel in Lean"
-      img="/hbimg.webp"
-      desc="A formalization using LEAN of the Heine-Borel theorem for metric spaces, developed as the final exam project for MAT740. The constraint was to avoid Mathlib.Topology, requiring the construction of all topological foundations entirely from scratch."
-      url="https://github.com/samubiscaro/heine-borel"
-      badge="NEW"
-    />
-
-  <div class="divider my-0"></div>
-
-  <HorizontalCard
-    title="Analysis on Gaussian Spaces seminar"
-    img="/AnalGauss.svg"
-    desc="In this seminar we study the infinite-dimensional generalization of the Malliavin derivative, and its link to stochastic analysis (in italian)."
-    url="https://drive.google.com/file/d/14i2yctu1kZDdWOtmhbynCft3XEACtyKn/view?usp=sharing"
-  />
-  <!-- 
-      badge="NEW" 
-    -->
-  <div class="divider my-0"></div>
-  <HorizontalCard
-    title="Bachelor Thesis"
-    
-    desc="My thesis, 'A Non-Commutative Extension of the Sewing Lemma and its Applications for Quantum Mechanics', supervised by Prof. Dario Trevisan, gives a generalization of the Sewing Lemma for non-commutative systems and studies its use in quantum evolution."
-    url="https://drive.google.com/file/d/1qlOKCqaVecncnn3TfFgdKbPsV0rAwVRO/view"
-  />
-
 </BaseLayout>
