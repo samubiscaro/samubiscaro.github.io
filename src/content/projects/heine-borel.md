@@ -5,4 +5,7 @@ heroImage: "/hbimg.webp"
 url: "https://github.com/samubiscaro/heine-borel"
 pubDate: 2026-01-08
 badge: "NEW"
+draft: true
 ---
+
+When I will have something written out I can set draft: false
