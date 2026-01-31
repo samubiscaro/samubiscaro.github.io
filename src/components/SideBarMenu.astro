@@ -3,7 +3,7 @@ const { sideBarActiveItemID } = Astro.props;
 const activeClass = "bg-base-300"; // For primary color replace with `active` class
 ---
 
-<ul class="menu grow shrink menu-md overflow-y-auto">
+<ul class="menu grow shrink menu-md overflow-y-auto" data-side-bar-active-item-id={sideBarActiveItemID}>
     <li><a class="py-3 text-base" id="home" href="/">Home</a></li>
     <li><a class="py-3 text-base" id="notes" href="/notes">Notes</a></li>
     <li><a class="py-3 text-base" id="projects" href="/projects">Projects</a></li>
@@ -16,6 +16,29 @@ const activeClass = "bg-base-300"; // For primary color replace with `active` cl
 </ul>
 
 <script define:vars={{ sideBarActiveItemID: sideBarActiveItemID, activeClass: activeClass }}>
-const activeItemElem = document.getElementById(sideBarActiveItemID);
-activeItemElem && activeItemElem.classList.add(activeClass);
+    
+    function applyActiveState() {
+        // 1. Try to find if the NEW page has a new active ID defined in its content
+        // We look for a metadata tag or a specific element Astro might have updated
+        const newPageActiveId = document.querySelector('[data-side-bar-active-item-id]')?.getAttribute('data-side-bar-active-item-id');
+        
+        // Use the new ID if found, otherwise fallback to the initial one
+        const currentId = newPageActiveId || sideBarActiveItemID;
+
+        // 2. Remove the active class from ALL items
+        const menuItems = document.querySelectorAll(".menu a");
+        menuItems.forEach((item) => item.classList.remove(activeClass));
+
+        // 3. Add it to the correct one
+        const activeItemElem = document.getElementById(currentId);
+        if (activeItemElem) {
+            activeItemElem.classList.add(activeClass);
+        }
+    }
+
+    // Run on initial load
+    applyActiveState();
+
+    // Run every time a View Transition completes
+    document.addEventListener("astro:after-swap", applyActiveState);
 </script>
