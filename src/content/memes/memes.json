@@ -1,12 +1,32 @@
 [
-  { "title": "Expectation vs Reality", "src": "/AnalGauss.svg", "alt": "Integration by parts meme" },
-  { "title": "The Engineer vs The Mathematician", "src": "https://picsum.photos/300/400", "alt": "Pi equals 3 joke" },
-    { "title": "Expectation vs Reality", "src": "https://picsum.photos/200/300", "alt": "Integration by parts meme" },
-  { "title": "The Engineer vs The Mathematician", "src": "https://picsum.photos/500/400", "alt": "Pi equals 3 joke" },
-    { "title": "Expectation vs Reality", "src": "https://picsum.photos/200/700", "alt": "Integration by parts meme" },
-  { "title": "The Engineer vs The Mathematician", "src": "https://picsum.photos/500/400", "alt": "Pi equals 3 joke" },
-    { "title": "Expectation vs Reality", "src": "https://picsum.photos/300/300", "alt": "Integration by parts meme" },
-  { "title": "The Engineer vs The Mathematician", "src": "https://picsum.photos/300/400", "alt": "Pi equals 3 joke" },
-    { "title": "Expectation vs Reality", "src": "https://picsum.photos/400/300", "alt": "Integration by parts meme" },
-  { "title": "The Engineer vs The Mathematician", "src": "https://picsum.photos/700/400", "alt": "Pi equals 3 joke" }
+  {
+    "src": "/memes/024855b4-6830-4455-83ed-137d7d62523a.JPG"
+  },
+  {
+    "src": "/memes/3652b81f-c289-43fb-9b8e-89ff17a5ba56.JPG"
+  },
+  {
+    "src": "/memes/bogoliubov-told-the-truth.jpg"
+  },
+  {
+    "src": "/memes/bogoliubov-vs-hamiltonian.jpg"
+  },
+  {
+    "src": "/memes/c89ad62d-493c-4cc5-9bce-15c1d47cc33e.JPG"
+  },
+  {
+    "src": "/memes/cauchy-schwartz.jpg"
+  },
+  {
+    "src": "/memes/cs-on-operators.png"
+  },
+  {
+    "src": "/memes/IMG_8038.JPG"
+  },
+  {
+    "src": "/memes/panik-kalm-angery-quantum.jpg"
+  },
+  {
+    "src": "/memes/topological-entropy.jpg"
+  }
 ]
