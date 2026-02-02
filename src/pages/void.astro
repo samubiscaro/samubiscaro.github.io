@@ -4,9 +4,7 @@ import memesData from "../content/memes/memes.json";
 
 const memes = [...memesData].sort(() => Math.random() - 0.5);
 // Logic to split the array into 3 columns for a true masonry look
-const col1 = memes.filter((_, idx) => idx % 3 === 0);
-const col2 = memes.filter((_, idx) => idx % 3 === 1);
-const col3 = memes.filter((_, idx) => idx % 3 === 2);
+// run ls public/memes | jq -R '{"src": ("/memes/" + .)}' | jq -s '.' > src/content/memes/memes.json to add the new memes
 ---
 
 <BaseLayout title="The Void" robots="noindex, nofollow">
@@ -16,20 +14,22 @@ const col3 = memes.filter((_, idx) => idx % 3 === 2);
     <div><h1 class="text-4xl font-bold mb-5 text-primary">THE VOID</h1></div>
   </div>
 
-  <div class="mb-10">
+  <div class="mb-5">
     <p class="text-lg">
         Nothing to see here.
     </p>
   </div>
 
-<div class="columns-1 lg:columns-2 xl:columns-3 2xl:columns-5 gap-4 w-full pb-20">
+  <div class="divider my-0 mb-5" />
+
+  <div class="columns-1 lg:columns-2 xl:columns-3 2xl:columns-5 gap-4 w-full pb-20">
     {memes.map((meme) => (
       /* break-inside-avoid ensures a meme doesn't get cut in half across columns */
       <div class="break-inside-avoid mb-4">
         <a 
           href={meme.src} 
           target="_blank" 
-          class="block rounded-lg transition-all duration-200 hover:ring-4 hover:ring-primary focus:outline-none"
+          class="block rounded-lg transition-all duration-200 hover:ring-4 hover:ring-primary focus:outline-none hover:scale-105"
         >
           <img 
             src={meme.src} 
