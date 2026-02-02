@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /void
 
 Sitemap: https://samubiscaro.github.io/sitemap-index.xml

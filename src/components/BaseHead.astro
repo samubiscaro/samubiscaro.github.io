@@ -8,9 +8,16 @@ export interface Props {
 	description: string;
 	image?: string;
 	ogType?: string;
+    robots?: string; // Add this line
 }
 
-const { title, description, image = '/social_img.webp', ogType = 'website' } = Astro.props;
+const { 
+	title, 
+	description, 
+	image = '/social_img.webp', 
+	ogType = 'website', 
+	robots = 'index, follow' // Default: allow indexing for all other pages 
+} = Astro.props;
 ---
 
 <!-- Global Metadata -->
@@ -19,6 +26,8 @@ const { title, description, image = '/social_img.webp', ogType = 'website' } = A
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <meta name="generator" content={Astro.generator} />
 <meta name="google-site-verification" content="2OzxpDQz05HxRy6ItUDc2qz2DsCRYWBh3YzPJ9WHeR4" />
+
+<meta name="robots" content={robots} /> <title>{title}</title>
 
 <!-- Primary Meta Tags -->
 <title>{title}</title>
@@ -38,4 +47,3 @@ const { title, description, image = '/social_img.webp', ogType = 'website' } = A
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
-

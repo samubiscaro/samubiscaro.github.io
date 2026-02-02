@@ -9,7 +9,9 @@ const col2 = memes.filter((_, idx) => idx % 3 === 1);
 const col3 = memes.filter((_, idx) => idx % 3 === 2);
 ---
 
-<BaseLayout title="The Void">
+<BaseLayout title="The Void" robots="noindex, nofollow">
+  <meta name="robots" content="noindex, nofollow" slot="head" />
+
   <div>
     <div><h1 class="text-4xl font-bold mb-5 text-primary">THE VOID</h1></div>
   </div>
@@ -20,15 +22,22 @@ const col3 = memes.filter((_, idx) => idx % 3 === 2);
     </p>
   </div>
 
-
-  <div class="flex flex-col md:flex-row gap-4 w-full items-start">
-    {[col1, col2, col3].map((column) => (
-      <div class="flex flex-col gap-4 flex-1">
-        {column.map((meme) => (
-          <a href={meme.src} target="_blank" class="block rounded-lg hover:ring-4 hover:ring-primary transition-all duration-200">
-            <img src={meme.src} alt={meme.alt} class="w-full h-auto rounded-lg block shadow-sm" />
-          </a>
-        ))}
+<div class="columns-1 lg:columns-2 xl:columns-3 2xl:columns-5 gap-4 w-full pb-20">
+    {memes.map((meme) => (
+      /* break-inside-avoid ensures a meme doesn't get cut in half across columns */
+      <div class="break-inside-avoid mb-4">
+        <a 
+          href={meme.src} 
+          target="_blank" 
+          class="block rounded-lg transition-all duration-200 hover:ring-4 hover:ring-primary focus:outline-none"
+        >
+          <img 
+            src={meme.src} 
+            alt="Meme" 
+            class="w-full h-auto rounded-lg block shadow-sm border border-base-300" 
+            loading="lazy"
+          />
+        </a>
       </div>
     ))}
   </div>
