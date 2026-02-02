@@ -5,10 +5,18 @@ const today = new Date();
 <footer class="footer footer-center block text-xs py-5 opacity-75">
 
   <div class="pb-2">
-    &copy; {today.getFullYear()} Samuele Biscaro
+    <span class="group">
+      &copy; {today.getFullYear()} Samuele Biscaro
+      <a 
+        href="/void" 
+        class="ml-2 text-lg opacity-0 group-hover:opacity-40 hover:!opacity-100 hover:text-primary transition-all duration-300 cursor-pointer"
+        title="Nothing to see here"
+      >
+        &empty;
+      </a>
+    </span>
   </div>
   <div class="inline text-xs opacity-50">
-
     Developed using
     <!-- Thanks for using this template. You can keep this line to support my work :) -->
     <a href="https://astrofy-template.netlify.app/" target="_blank">Astrofy Template</a>
