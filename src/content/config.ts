@@ -1,4 +1,5 @@
 import { z, defineCollection } from "astro:content";
+import type { CollectionEntry } from 'astro:content'; //
 
 // 1. Define the collection directly using the functional schema
 const projects = defineCollection({
@@ -14,11 +15,10 @@ const projects = defineCollection({
     }),
 });
 
-// 2. Export the collections object (Astro looks for this specifically)
+// 2. Export the collections object
 export const collections = {
     'projects': projects,
 };
 
-// 3. Export the schema and types for your other components
-export const projectSchema = projects.schema;
-export type ProjectSchema = z.infer<ReturnType<typeof projects.schema>>;
+// 3. Export the Type for use in other components
+export type ProjectSchema = CollectionEntry<'projects'>['data']; //
