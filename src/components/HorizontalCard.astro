@@ -10,15 +10,17 @@ const computedTarget = target ? target : (draft ? "_blank" : "_self");
   <div class="hero-content flex-col md:flex-row">
     {
       img && (
-        <a href={url} target={computedTarget} class="w-full md:w-auto">
-          <Image
-            src={img}
-            width={750}
-            height={422}
-            format="webp"
-            alt={title}
-            class="max-w-full md:max-w-[13rem] rounded-lg"
-          />
+        <a href={url} target={computedTarget} class="w-full md:w-48 flex-shrink-0">
+          <div class="aspect-[4/3] overflow-hidden rounded-md border border-base-300">
+            <Image
+              src={img}
+              width={400} 
+              height={300}
+              format="webp"
+              alt={title}
+              class="w-full h-full object-cover"
+            />
+          </div>
         </a>
       )
     }

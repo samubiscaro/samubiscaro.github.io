@@ -16,7 +16,7 @@ This project is a seminar I held as the final exam for the course *Analysis on G
 A probability measure $\mu$ on a Hilbert space $(H, \mathcal{B}(H))$ is *Gaussian* if its Fourier transform (characteristic function) is given by:
 
 $$
-\hat{\mu}(h) = \int_{H} e^{i\langle h,x \rangle} \mu(dx) = e^{i\langle m,h \rangle} e^{-\frac{1}{2}\langle Qh,h \rangle}, \quad \forall h \in H
+\hat{\mu}(h) = \int_{H} e^{i\langle h,x \rangle} \mu(dx) = e^{i\langle m,h \rangle} e^{-\frac{1}{2}\langle Qh,h \rangle}, \quad \forall h \in H.
 $$
 
 If $\text{Ker}(Q) = \{0\}$, the measure is non-degenerate. A crucial result in this setting is that $Q$ is a *compact, symmetric, and positive operator*, allowing for an orthonormal basis $\{e_k\}$ of eigenvectors such that:
@@ -61,15 +61,18 @@ The domain of the closure of $M$ is the **Malliavin-Sobolev space** $\mathbb{D}^
 * **Brownian Motion:** The derivative of a Brownian path is $M_\tau B_t = \mathbb{1}_{[0,t]}(\tau)$.
 * **Stochastic Interpretation:** The Malliavin derivative of a random variable is a stochastic process.
 
-### Resources & Materials
+### Resources
 
 <div class="flex flex-col md:flex-row gap-4 my-8">
-  <a href="https://drive.google.com/file/d/14i2yctu1kZDdWOtmhbynCft3XEACtyKn/view?usp=sharing" target="_blank" class="btn btn-outline btn-primary text-lg capitalize">
-    View Full Seminar PDF
+  <a href="/docs/processi-stocastici-e-calcolo-di-malliavin.pdf" target="_blank" class="btn btn-outline btn-primary">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+    Full Seminar in PDF
   </a>
 </div>
 
 ---
 
 **References:**
+
 * **Giuseppe Da Prato**, *Introduction to Stochastic Analysis and Malliavin Calculus*, Scuola Normale Superiore, 2009.
+
