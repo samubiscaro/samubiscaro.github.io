@@ -1,6 +1,14 @@
 ---
+import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import CourseCard from "../components/CourseCard.astro";
+
+// 1. Fetch all entries from the 'notes' collection
+const allNotes = await getCollection("notes");
+
+// 2. Sort notes by year (descending) and then by title
+// This ensures 2024-2025 appears above 2023-2024
+const years = [...new Set(allNotes.map((note) => note.data.year))].sort().reverse();
 ---
 
 
@@ -27,6 +35,29 @@ import CourseCard from "../components/CourseCard.astro";
       </div>
       -->
     </div>
+
+    {
+      years.map((year) => (
+        <section class="mb-12">
+          <h2 class="text-2xl font-bold border-b-2 border-primary w-fit mb-6">
+            {year}
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {allNotes
+              .filter((note) => note.data.year === year)
+              .map((note) => (
+                <CourseCard
+                  title={note.data.title}
+                  professor={note.data.professor}
+                  university={note.data.university}
+                  url={note.data.url}
+                  badge={note.data.badge}
+                />
+              ))}
+          </div>
+        </section>
+      ))
+    }
 
     <section class="mb-12">
       <h2 class="text-2xl font-bold border-b-2 border-primary w-fit mb-6">2024-2025</h2>
