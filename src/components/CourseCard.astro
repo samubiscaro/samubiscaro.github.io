@@ -1,0 +1,15 @@
+---
+const { title, professor, university, url, badge = "IT" } = Astro.props;
+---
+
+<div class="p-6 border border-base-300 rounded-xl bg-base-100 hover:shadow-md transition-shadow flex flex-col">
+  <div class="flex-1">
+    <div class="flex justify-between items-start">
+        <h3 class="font-bold text-xl">{title}</h3>
+        <span class="badge badge-secondary">{badge}</span>
+    </div>
+    <p class="text-sm opacity-80 mb-1">{professor}</p>
+    <p class="text-xs font-semibold uppercase tracking-wider opacity-60">{university}</p>
+  </div>
+  <a href={url} target="_blank" class="btn btn-outline btn-primary btn-sm mt-6">Open Folder</a>
+</div>
