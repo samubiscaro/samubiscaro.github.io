@@ -24,7 +24,7 @@ const notes = defineCollection({
         university: z.string(),
         year: z.string(), // e.g., "2024-2025"
         url: z.string(),  // Your Google Drive link
-        badge: z.string().default("IT"),
+        badge: z.string().optional(),
     }),
 });
 
