@@ -7,7 +7,7 @@ module.exports = {
 	plugins: [require("@tailwindcss/typography"),require("daisyui")],
 	daisyui: {
 		themes: ["winter", "night"], // Carica SOLO questi due
-		darkTheme: "night", // name of one of the included themes for dark mode
+		darkTheme: "night", // Imposta "night" come tema predefinito per la modalità scura
 		logs: false, // Shows info about daisyUI version and used config in the console when building your CSS
 	  }
 }
