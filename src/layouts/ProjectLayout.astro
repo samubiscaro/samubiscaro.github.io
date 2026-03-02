@@ -6,24 +6,54 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 
 export interface Props extends ProjectSchema {}
 
-const { title, description, pubDate, heroImage, badge } = Astro.props;
+const { title, description, pubDate, heroImage, imageCredit } = Astro.props;
 dayjs.extend(localizedFormat);
 const displayDate = dayjs(pubDate).format("ll")
 import { Image } from "astro:assets";
 ---
 
-<BaseLayout title={title} description={description} image={heroImage} ogType="article" sideBarActiveItemID="projects">
-  <main class="md:flex md:justify-center">
-    <article class="prose prose-lg max-w-[750px] prose-img:mx-auto">
-      {heroImage && <Image width={750} height={422} format="webp" src={heroImage} alt={title} class="w-full mb-6" />}
-      <h1 class="title my-2 text-4xl font-bold">{title}</h1>
-      {pubDate && <time>{displayDate}</time>}
-      <br />
-      {badge && <div class="badge badge-secondary my-1">{badge}</div>}
+<BaseLayout title={title} description={description} image={heroImage?.src} ogType="article" sideBarActiveItemID="projects">
+  <main class="md:flex md:justify-center px-4">
+    <article class="prose prose-lg max-w-[850px] prose-img:mx-auto prose-headings:font-bold">
       
-      <div class="divider my-2"></div>
+      {heroImage && (
+        <div class="mb-0 group">
+          <div class="not-prose relative w-full aspect-[21/9] overflow-hidden rounded-xl shadow-2xl group">
+            <Image 
+              width={2000} 
+              height={850} 
+              format="webp" 
+              quality="max"
+              src={heroImage} 
+              alt={title} 
+              class="object-cover w-full h-full m-0 transition-transform duration-500 group-hover:scale-105" 
+            />
+            <div class="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-xl"></div>
+          </div>
+          <div class="flex justify-end -mt-0.5 pr-1"> 
+            <p class="text-[9px] uppercase tracking-wider opacity-30 leading-none py-1">
+              {imageCredit}
+            </p>
+          </div>
+        </div>
+      )}
+
+      <header class="mb-0">
+        <h1 class="text-4xl font-extrabold tracking-tight mb-1 text-base-content leading-tight">
+          {title}
+        </h1>
+        {pubDate && (
+          <time class="text-sm font-medium opacity-50 uppercase tracking-widest">
+            {displayDate}
+          </time>
+        )}
+        <div class="divider my-0" />
+      </header>
       
-      <slot /> 
+      <div class="mt-0 leading-relaxed">
+        <slot /> 
+      </div>
+
     </article>
   </main>
 </BaseLayout>

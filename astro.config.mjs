@@ -2,11 +2,20 @@ import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwind from "@astrojs/tailwind";
-//import partytown from '@astrojs/partytown'
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 
-// https://astro.build/config
+const mathConfig = {
+  remarkPlugins: [remarkMath],
+  rehypePlugins: [[rehypeKatex, { 
+    output: 'html',
+    macros: { "\\E": "\\mathbb{E}" } // Example: add your custom math macros here
+  }]],
+};
+
 export default defineConfig({
   site: 'https://samubiscaro.github.io',
+<<<<<<< HEAD
   base: '/',
   integrations: [mdx(), sitemap(), tailwind()],
 
@@ -14,3 +23,12 @@ export default defineConfig({
     service: { entrypoint: 'astro/assets/services/sharp' }
   }
 });
+=======
+  integrations: [
+    mdx(mathConfig), // This ensures MDX files render math correctly
+    sitemap(), 
+    tailwind()
+  ],
+  markdown: mathConfig, // This ensures .md files render math correctly
+});
+>>>>>>> 0395dd8ff8243eac39e9db75ddf66cf539a16bd1

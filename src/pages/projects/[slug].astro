@@ -1,19 +1,27 @@
 ---
-import { getCollection } from "astro:content";
-import ProjectLayout from "../../layouts/ProjectLayout.astro"; // Ensure this path is correct
+import { getCollection, type CollectionEntry } from "astro:content";
+import ProjectLayout from "../../layouts/ProjectLayout.astro";
 
-// 1. Generate a new path for every project file
 export async function getStaticPaths() {
   const projectEntries = await getCollection("projects", ({ data }) => {
-        return data.draft !== true;
-    });
+    return data.draft !== true;
+  });
+  
   return projectEntries.map(entry => ({
-    params: { slug: entry.slug }, props: { entry },
+    params: { slug: entry.slug }, 
+    props: { entry },
   }));
 }
 
-// 2. Get the specific project data
+// 1. Explicitly type the props
+interface Props {
+  entry: CollectionEntry<"projects">;
+}
+
+// 2. Destructure the typed entry
 const { entry } = Astro.props;
+
+// 3. Render the content (TypeScript now recognizes .render())
 const { Content } = await entry.render();
 ---
 
