@@ -7,6 +7,10 @@ import tailwind from "@astrojs/tailwind";
 // https://astro.build/config
 export default defineConfig({
   site: 'https://samubiscaro.github.io',
-  //base: 'my-repo',
+  base: '/',
   integrations: [mdx(), sitemap(), tailwind()],
+
+  image: {
+    service: { entrypoint: 'astro/assets/services/sharp' }
+  }
 });
