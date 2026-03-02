@@ -22,6 +22,7 @@ const projects = (await getCollection("projects")).sort(
           desc={project.data.description}
           url={project.data.url}
           badge={project.data.badge}
+          draft={project.data.draft}
         />
         <div class="divider my-0" />
       </>

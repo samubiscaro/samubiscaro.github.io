@@ -1,3 +1,38 @@
+/* FORCE K ATEX STYLING */
+@import "katex/dist/katex.min.css";
+
 .time-line-container>div:last-child .education__time>.education__line {
     display: none;
+}
+
+.math-definition {
+  @apply border-l-4 border-primary bg-base-200 p-4 my-6 rounded-r-lg;
+}
+.math-definition strong {
+  @apply text-primary uppercase tracking-wider text-sm;
+}
+
+/* Container for the display math */
+.katex-display {
+  /* Allows horizontal swiping on mobile */
+  overflow-x: auto;
+  overflow-y: hidden;
+  
+  /* Adds a smooth fade effect on the edges so users know there is more to see */
+  mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  
+  /* Touch-friendly scrolling */
+  -webkit-overflow-scrolling: touch;
+  padding: 1rem 0;
+}
+
+/* Ensure the math doesn't shrink too much */
+.katex-display .katex {
+  min-width: min-content;
+}
+
+/* Optional: Hide scrollbars for a cleaner look */
+.katex-display::-webkit-scrollbar {
+  display: none;
 }
