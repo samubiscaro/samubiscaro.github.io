@@ -15,20 +15,17 @@ const mathConfig = {
 
 export default defineConfig({
   site: 'https://samubiscaro.github.io',
-<<<<<<< HEAD
   base: '/',
-  integrations: [mdx(), sitemap(), tailwind()],
 
-  image: {
-    service: { entrypoint: 'astro/assets/services/sharp' }
-  }
-});
-=======
   integrations: [
     mdx(mathConfig), // This ensures MDX files render math correctly
     sitemap(), 
     tailwind()
   ],
+  
   markdown: mathConfig, // This ensures .md files render math correctly
+
+  image: {
+    service: { entrypoint: 'astro/assets/services/sharp' }
+  }
 });
->>>>>>> 0395dd8ff8243eac39e9db75ddf66cf539a16bd1
