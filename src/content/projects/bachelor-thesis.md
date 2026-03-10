@@ -2,7 +2,7 @@
 title: "Bachelor Thesis"
 description: "My thesis, 'A Non-Commutative Extension of the Sewing Lemma and its Applications for Quantum Mechanics', supervised by Prof. Dario Trevisan, gives a generalization of the Sewing Lemma for non-commutative systems and studies its use in quantum evolution."
 pubDate: 2024-10-26
-heroImage: "../../assets/images/projects/flyd-yQYQJaiypZE.jpg"
+#heroImage: "../../assets/images/projects/flyd-yQYQJaiypZE.jpg"
 imageCredit: "Photo by FlyD / Unsplash"
 url: "/projects/bachelor-thesis"
 # badge: "Thesis"

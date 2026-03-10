@@ -2,7 +2,7 @@
 title: "Analysis on Gaussian Spaces"
 description: "A seminar on the infinite-dimensional generalization of the Malliavin derivative and its link to stochastic analysis."
 pubDate: 2025-01-08
-heroImage: "../../assets/images/projects/gauss-hero.jpg"
+#heroImage: "../../assets/images/projects/gauss-hero.jpg"
 imageCredit: "Photo by Martin Martz / Unsplash"
 url: "/projects/gaussian-spaces"
 #badge: "Stochastic Analysis"
@@ -45,21 +45,6 @@ $$
 $$
 \varphi \mapsto Q^{1/2} D\varphi.
 $$
-
-#### Integration by Parts
-The closability of $M$ relies on the fundamental integration by parts formula. For functions $\varphi, \psi \in \mathcal{E}(H)$ and $z \in H$:
-
-$$
-\int_{H} \langle M\varphi, z \rangle \,\psi \ d\mu = -\int_{H} \langle M\psi, z \rangle \, \varphi \ d\mu + \int_{H} W_z \, \varphi \, \psi \ d\mu.
-$$
-
-The domain of the closure of $M$ is the **Malliavin-Sobolev space** $\mathbb{D}^{1,2}(H, \mu)$.
-
-### 4. Key Results
-
-* **White Noise Derivative:** For any $f \in H$, $M(W_f) = f$.
-* **Brownian Motion:** The derivative of a Brownian path is $M_\tau B_t = \mathbb{1}_{[0,t]}(\tau)$.
-* **Stochastic Interpretation:** The Malliavin derivative of a random variable is a stochastic process.
 
 ### Resources
 
