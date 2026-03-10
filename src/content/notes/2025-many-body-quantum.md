@@ -4,6 +4,6 @@ professor: "Prof. Benjamin Schlein"
 university: "University of Zurich"
 year: "2025-2026"
 url: "#"
-#badge: ""
+badge: "EN"
 ---
 Introductory course to Probability at UniPi.
