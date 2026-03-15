@@ -6,6 +6,8 @@ on:
 jobs:
   update-cv:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true # Forza Node 24 per le azioni
     steps:
       - name: Checkout Site Repo
         uses: actions/checkout@v4
