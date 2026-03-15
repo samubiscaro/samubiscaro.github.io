@@ -4,7 +4,7 @@ import { getCollection } from "astro:content";
 
 export async function GET(context) {
   const projects = await getCollection("projects", ({ data }) => !data.draft);
-  const notes = await getCollection("notes");
+  const notes = await getCollection("notes", ({ data }) => !data.draft);
 
   // 1. Progetti
   const projectItems = projects.map((item) => ({
@@ -20,7 +20,7 @@ export async function GET(context) {
   const noteItems = notes.map((item) => {
     const startYear = item.data.year.split('-')[0] || "2025";
     return {
-      title: `[Notes] ${item.data.title} - Prof. ${item.data.professor}`,
+      title: `[Notes] ${item.data.title} - ${item.data.professor}`,
       pubDate: new Date(`${startYear}-09-01`),
       description: `Course at ${item.data.university}. Academic Year: ${item.data.year}`,
       link: item.data.url, 

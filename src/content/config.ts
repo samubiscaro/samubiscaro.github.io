@@ -15,16 +15,16 @@ const projects = defineCollection({
     }),
 });
 
-// NEW: Notes Collection
 const notes = defineCollection({
-    type: 'content', // This tells Astro to look for .md or .mdx files
+    type: 'content',
     schema: z.object({
         title: z.string(),
         professor: z.string(),
         university: z.string(),
-        year: z.string(), // e.g., "2024-2025"
-        url: z.string(),  // Your Google Drive link
+        year: z.string(),
+        url: z.string(),
         badge: z.string().optional(),
+        draft: z.boolean().optional(), // <-- Aggiungi questa riga
     }),
 });
 
