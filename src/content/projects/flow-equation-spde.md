@@ -1,6 +1,6 @@
 ---
 title: "Flow Equation Approach to a Singular SPDE"
-description: "An overview of the regularization and renormalization techniques required to give rigorous meaning to singular Stochastic Partial Differential Equations, specifically analyzing a fractional variant of the dynamical $\Phi^4$ model."
+description: "An overview of the Flow Equation technique used to give rigorous meaning to a singular Stochastic Partial Differential Equation"
 url: "/projects/flow-equation-spde"
 pubDate: 2026-01-13
 draft: false
