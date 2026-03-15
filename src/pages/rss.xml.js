@@ -6,26 +6,26 @@ export async function GET(context) {
   const projects = await getCollection("projects", ({ data }) => !data.draft);
   const notes = await getCollection("notes");
 
-  // 1. Elaborazione PROGETTI (Link interni al sito)
+  // 1. Progetti
   const projectItems = projects.map((item) => ({
     title: `[Project] ${item.data.title}`,
     pubDate: item.data.pubDate,
     description: item.data.description,
     link: `/projects/${item.slug}/`,
+    // Usiamo lo slug come ID univoco per evitare duplicati
+    id: `${context.site}projects/${item.slug}/`,
   }));
 
-  // 2. Elaborazione NOTE (Link diretti a Google Drive)
+  // 2. Note
   const noteItems = notes.map((item) => {
-    // Estraiamo l'anno di inizio dall'anno accademico (es. "2024-2025" -> 2024)
     const startYear = item.data.year.split('-')[0] || "2025";
-    
     return {
       title: `[Notes] ${item.data.title} - Prof. ${item.data.professor}`,
-      // Usiamo il 1° Settembre dell'anno accademico come data tecnica
       pubDate: new Date(`${startYear}-09-01`),
       description: `Course at ${item.data.university}. Academic Year: ${item.data.year}`,
-      // MANDIAMO L'UTENTE DIRETTAMENTE SU DRIVE
       link: item.data.url, 
+      // ID univoco basato sulla collezione e lo slug
+      id: `${context.site}notes/${item.slug}/`,
     };
   });
 
@@ -34,5 +34,7 @@ export async function GET(context) {
     description: SITE_DESCRIPTION,
     site: context.site,
     items: [...projectItems, ...noteItems].sort((a, b) => b.pubDate - a.pubDate),
+    // Risolve l'errore "Missing atom:link" aggiungendo il riferimento self nell'header XML
+    customData: `<atom:link href="${context.site}rss.xml" rel="self" type="application/rss+xml" xmlns:atom="http://www.w3.org/2005/Atom"/>`,
   });
 }
