@@ -1,7 +1,7 @@
-name: CV Update
+name: Manual CV Update
 
 on:
-  workflow_dispatch: # Questo abilita il tastone "Run workflow" su GitHub
+  workflow_dispatch: 
 
 jobs:
   update-cv:
@@ -10,25 +10,35 @@ jobs:
       - name: Checkout Site Repo
         uses: actions/checkout@v4
         with:
-          # Usiamo il token standard GITHUB_TOKEN fornito da GitHub Actions
+          # Usiamo il token standard per gestire la repo del sito
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Download CV PDF
+      - name: Download CV from Private Repo
         run: |
-          # Scarica il file e sovrascrive quello in public/
-          curl -L https://raw.githubusercontent.com/samubiscaro/CV_Biscaro/main/CV_Biscaro.pdf -o public/CV_Biscaro.pdf
+          # Usiamo l'API di GitHub con il Secret per scaricare il CV
+          curl -H "Authorization: token ${{ secrets.CV_REPO_TOKEN }}" \
+               -H "Accept: application/vnd.github.v3.raw" \
+               -L "https://api.github.com/repos/samubiscaro/CV_Biscaro/contents/CV_Biscaro.pdf" \
+               -o public/CV_Biscaro.pdf
+          
+          if [ -f "public/CV_Biscaro.pdf" ]; then
+            echo "PDF scaricato con successo."
+          else
+            echo "Errore nel download del PDF."
+            exit 1
+          fi
 
       - name: Update Last Revised Date
         run: |
-          # Ottiene la data corrente (es: March 2026)
           CURRENT_DATE=$(date +"%B %Y")
-          # Cerca la stringa nel file cv.astro e la aggiorna
+          # Il comando cerca 'Last revised:' seguito da qualsiasi mese e anno e lo aggiorna
           sed -i "s/Last revised: [A-Za-z]\+ [0-9]\{4\}/Last revised: $CURRENT_DATE/g" src/pages/cv.astro
+          echo "Data aggiornata a $CURRENT_DATE"
 
       - name: Commit and Push changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add public/CV_Biscaro.pdf src/pages/cv.astro
-          git commit -m "Manual CV Sync: $(date +'%Y-%m-%d')" || echo "No changes to commit"
+          git commit -m "Manual CV Sync: $(date +'%Y-%m-%d')" || echo "Nessuna modifica rilevata"
           git push
