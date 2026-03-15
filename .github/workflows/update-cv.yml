@@ -11,7 +11,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           # Usiamo il token standard per gestire la repo del sito
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.CV_REPO_TOKEN }}
+          fetch-depth: 0
 
       - name: Download CV from Private Repo
         run: |
@@ -37,8 +38,8 @@ jobs:
 
       - name: Commit and Push changes
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "samubiscaro[bot]"
+          git config --global user.email "samabarama@gmail.com"
           git add public/CV_Biscaro.pdf src/pages/cv.astro
-          git commit -m "Manual CV Sync: $(date +'%Y-%m-%d')" || echo "Nessuna modifica rilevata"
+          git commit -m "CV Sync: $(date +'%Y-%m-%d')" || echo "Nessuna modifica rilevata"
           git push
