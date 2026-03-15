@@ -52,6 +52,7 @@ const years = [...new Set(allNotes.map((note) => note.data.year))].sort().revers
                   university={note.data.university}
                   url={note.data.url}
                   badge={note.data.badge}
+                  draft={note.data.draft}
                 />
               ))}
           </div>

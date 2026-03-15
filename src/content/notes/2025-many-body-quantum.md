@@ -5,6 +5,6 @@ university: "University of Zurich"
 year: "2025-2026"
 url: "#"
 badge: "EN"
-draft: "true"
+draft: true
 ---
 Introductory course to Probability at UniPi.
