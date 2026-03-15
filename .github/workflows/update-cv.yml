@@ -1,4 +1,4 @@
-name: Manual CV Update
+name: CV Update
 
 on:
   workflow_dispatch: 
