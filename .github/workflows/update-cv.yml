@@ -1,0 +1,34 @@
+name: CV Update
+
+on:
+  workflow_dispatch: # Questo abilita il tastone "Run workflow" su GitHub
+
+jobs:
+  update-cv:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Site Repo
+        uses: actions/checkout@v4
+        with:
+          # Usiamo il token standard GITHUB_TOKEN fornito da GitHub Actions
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download CV PDF
+        run: |
+          # Scarica il file e sovrascrive quello in public/
+          curl -L https://raw.githubusercontent.com/samubiscaro/CV_Biscaro/main/CV_Biscaro.pdf -o public/CV_Biscaro.pdf
+
+      - name: Update Last Revised Date
+        run: |
+          # Ottiene la data corrente (es: March 2026)
+          CURRENT_DATE=$(date +"%B %Y")
+          # Cerca la stringa nel file cv.astro e la aggiorna
+          sed -i "s/Last revised: [A-Za-z]\+ [0-9]\{4\}/Last revised: $CURRENT_DATE/g" src/pages/cv.astro
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/CV_Biscaro.pdf src/pages/cv.astro
+          git commit -m "Manual CV Sync: $(date +'%Y-%m-%d')" || echo "No changes to commit"
+          git push
