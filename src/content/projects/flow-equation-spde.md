@@ -1,12 +1,12 @@
 ---
 title: "Flow Equation Approach to a Singular SPDE"
-description: "An overview of the Flow Equation technique used to give rigorous meaning to a singular Stochastic Partial Differential Equation"
+description: "An overview of the Flow Equation technique used to give rigorous meaning to a specific singular Stochastic Partial Differential Equation. Developed under the supervision of Professor Marco Romito."
 url: "/projects/flow-equation-spde"
 pubDate: 2026-01-13
 draft: false
 ---
 
-This presentation outlines the project I developed for my 4th-year colloquium (*coloquio di passaggio d'anno*) at the **Scuola Normale Superiore (SNS)**. It was subsequently expanded and presented as the final exam for the **Introduction to Stochastic PDEs** course at the **University of Pisa**.
+This presentation outlines the project I developed for my 4th-year colloquium (*coloquio di passaggio d'anno*) at the **Scuola Normale Superiore (SNS)** under the supervision of Professor Marco Romito. It was subsequently expanded and presented as the final exam for the **Introduction to Stochastic PDEs** course at the **University of Pisa**.
 
 ### Motivation
 
