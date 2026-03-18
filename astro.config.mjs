@@ -17,11 +17,6 @@ export default defineConfig({
   site: 'https://samubiscaro.com',
   base: '/',
 
-  redirects: {
-    '/github': 'https://github.com/samubiscaro',
-    '/cv': '/CV_Biscaro.pdf', 
-  },
-
   integrations: [
     mdx(mathConfig), // This ensures MDX files render math correctly
     sitemap(), 
