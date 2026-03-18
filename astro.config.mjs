@@ -14,7 +14,7 @@ const mathConfig = {
 };
 
 export default defineConfig({
-  site: 'https://samubiscaro.github.io',
+  site: 'https://samubiscaro.com',
   base: '/',
 
   integrations: [
