@@ -43,5 +43,5 @@ jobs:
           git config --global user.name "samubiscaro[bot]"
           git config --global user.email "samabarama@gmail.com"
           git add public/CV_Biscaro.pdf src/pages/cv.astro
-          git commit -m "CV Sync: $(date +'%Y-%m-%d')" || echo "Nessuna modifica rilevata"
+          git commit -m "CV Sync: $(date +'%Y-%m-%d %H:%M:%S %z')" || echo "Nessuna modifica rilevata"
           git push
