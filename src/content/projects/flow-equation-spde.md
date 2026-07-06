@@ -6,7 +6,7 @@ pubDate: 2026-01-13
 draft: false
 ---
 
-This presentation outlines the project I developed for my 4th-year colloquium (*coloquio di passaggio d'anno*) at the **Scuola Normale Superiore (SNS)** under the supervision of Professor Marco Romito. It was subsequently expanded and presented as the final exam for the **Introduction to Stochastic PDEs** course at the **University of Pisa**.
+This presentation outlines the project I developed for my 4th-year colloquium (*colloquio di passaggio d'anno*) at the **Scuola Normale Superiore (SNS)** under the supervision of Professor Marco Romito. It was subsequently expanded and presented as the final exam for the **Introduction to Stochastic PDEs** course at the **University of Pisa**.
 
 ### Motivation
 
