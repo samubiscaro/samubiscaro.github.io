@@ -1,5 +1,6 @@
 ---
 import { getCollection, type CollectionEntry } from "astro:content";
+import { render } from "astro:content"; // 1. Import the new render function
 import ProjectLayout from "../../layouts/ProjectLayout.astro";
 
 export async function getStaticPaths() {
@@ -8,21 +9,21 @@ export async function getStaticPaths() {
   });
   
   return projectEntries.map(entry => ({
-    params: { slug: entry.slug }, 
+    params: { slug: entry.id }, // 2. Changed entry.slug to entry.id
     props: { entry },
   }));
 }
 
-// 1. Explicitly type the props
+// Explicitly type the props
 interface Props {
   entry: CollectionEntry<"projects">;
 }
 
-// 2. Destructure the typed entry
+// Destructure the typed entry
 const { entry } = Astro.props;
 
-// 3. Render the content (TypeScript now recognizes .render())
-const { Content } = await entry.render();
+// 3. Render the content using the new top-level render function
+const { Content } = await render(entry);
 ---
 
 <ProjectLayout {...entry.data}>

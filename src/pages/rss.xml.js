@@ -11,9 +11,9 @@ export async function GET(context) {
     title: `[Project] ${item.data.title}`,
     pubDate: item.data.pubDate,
     description: item.data.description,
-    link: `/projects/${item.slug}/`,
-    // Usiamo lo slug come ID univoco per evitare duplicati
-    id: `${context.site}projects/${item.slug}/`,
+    link: `/projects/${item.id}/`, // 1. Changed item.slug to item.id
+    // Usiamo lo id come ID univoco per evitare duplicati
+    id: `${context.site}projects/${item.id}/`, // 2. Changed item.slug to item.id
   }));
 
   // 2. Note
@@ -24,8 +24,8 @@ export async function GET(context) {
       pubDate: new Date(`${startYear}-09-01`),
       description: `Course at ${item.data.university}. Academic Year: ${item.data.year}`,
       link: item.data.url, 
-      // ID univoco basato sulla collezione e lo slug
-      id: `${context.site}notes/${item.slug}/`,
+      // ID univoco basato sulla collezione e lo id
+      id: `${context.site}notes/${item.id}/`, // 3. Changed item.slug to item.id
     };
   });
 

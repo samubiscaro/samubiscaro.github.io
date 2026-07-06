@@ -1,8 +1,11 @@
 import { z, defineCollection } from "astro:content";
 import type { CollectionEntry } from 'astro:content';
+import { glob } from 'astro/loaders'; // 1. Added the glob loader import
 
-// Existing Projects Collection
+// Projects Collection
 const projects = defineCollection({
+    // 2. Added loader to find project files
+    loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: "./src/content/projects" }),
     schema: ({ image }) => z.object({
         title: z.string(),
         description: z.string(),
@@ -15,8 +18,10 @@ const projects = defineCollection({
     }),
 });
 
+// Notes Collection
 const notes = defineCollection({
-    type: 'content',
+    // 3. Replaced type: 'content' with the glob loader
+    loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: "./src/content/notes" }),
     schema: z.object({
         title: z.string(),
         professor: z.string(),
@@ -24,16 +29,16 @@ const notes = defineCollection({
         year: z.string(),
         url: z.string(),
         badge: z.string().optional(),
-        draft: z.boolean().optional(), // <-- Aggiungi questa riga
+        draft: z.boolean().optional(),
     }),
 });
 
-// 2. Export BOTH collections here
+// Export BOTH collections here
 export const collections = {
     'projects': projects,
-    'notes': notes, // Add this line
+    'notes': notes,
 };
 
-// 3. Export the Types
+// Export the Types
 export type ProjectSchema = CollectionEntry<'projects'>['data'];
-export type NoteSchema = CollectionEntry<'notes'>['data']; // Added this for consistency
+export type NoteSchema = CollectionEntry<'notes'>['data'];
