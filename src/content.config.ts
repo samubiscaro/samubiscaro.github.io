@@ -1,10 +1,11 @@
-import { z, defineCollection } from "astro:content";
+// src/content/config.ts
+import { defineCollection } from "astro:content";
 import type { CollectionEntry } from 'astro:content';
-import { glob } from 'astro/loaders'; // 1. Added the glob loader import
+import { glob } from 'astro/loaders'; 
+import { z } from 'astro/zod'; // Fixed deprecation: imported from 'astro/zod'
 
 // Projects Collection
 const projects = defineCollection({
-    // 2. Added loader to find project files
     loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: "./src/content/projects" }),
     schema: ({ image }) => z.object({
         title: z.string(),
@@ -20,7 +21,6 @@ const projects = defineCollection({
 
 // Notes Collection
 const notes = defineCollection({
-    // 3. Replaced type: 'content' with the glob loader
     loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: "./src/content/notes" }),
     schema: z.object({
         title: z.string(),
@@ -33,12 +33,31 @@ const notes = defineCollection({
     }),
 });
 
-// Export BOTH collections here
+// Lab Collection
+const lab = defineCollection({
+    loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: "./src/content/lab" }),
+    schema: z.object({
+        title: z.string(),
+        description: z.string(),
+        pubDate: z.coerce.date().optional(),
+        badge: z.string().default('Idea'),
+        // .toLowerCase() allows you to type "Active", "WIP", or "active" in markdown without breaking
+        status: z.preprocess(
+            (val) => (typeof val === 'string' ? val.toLowerCase() : val),
+            z.enum(['active', 'wip', 'idea'])
+        ).default('idea'),
+        draft: z.boolean().optional().default(false),
+    }),
+});
+
+// Export ALL collections here
 export const collections = {
     'projects': projects,
     'notes': notes,
+    'lab': lab, // Registered here
 };
 
 // Export the Types
 export type ProjectSchema = CollectionEntry<'projects'>['data'];
 export type NoteSchema = CollectionEntry<'notes'>['data'];
+export type LabSchema = CollectionEntry<'lab'>['data']; // Added Type helper

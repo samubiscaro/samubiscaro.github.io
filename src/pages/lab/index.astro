@@ -1,0 +1,33 @@
+---
+// src/pages/lab/index.astro
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import LabCard from "../../components/LabCard.astro";
+
+// Fetch entries from the content layer and filter out drafts
+const experiments = await getCollection("lab", ({ data }) => !data.draft);
+---
+
+<BaseLayout title="Laboratory - Experiments" sideBarActiveItemID="lab">
+  <div class="mb-8">
+    <h1 class="text-4xl font-bold text-primary mb-2">LABORATORY</h1>
+    <p class="text-base-content/70 text-lg">
+      A sandbox collection of mathematical models.
+    </p>
+  </div>
+
+  <!-- Two-column responsive grid matching your site styling -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    {
+      experiments.map((exp) => (
+        <LabCard
+          title={exp.data.title}
+          desc={exp.data.description}
+          id={exp.id} 
+          badge={exp.data.badge}
+          status={exp.data.status}
+        />
+      ))
+    }
+  </div>
+</BaseLayout>

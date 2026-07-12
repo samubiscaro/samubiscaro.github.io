@@ -1,0 +1,220 @@
+---
+// src/components/lab/PowerGrid.astro
+---
+
+<div class="flex flex-col gap-6 bg-base-200 p-6 rounded-xl border border-base-300 my-6 shadow-sm not-prose w-full">
+  
+  <div class="flex flex-wrap gap-6 justify-center w-full">
+    <!-- Grid Canvas -->
+    <div class="flex flex-col items-center gap-2">
+      <span class="text-xs font-bold uppercase tracking-wider opacity-60">Electrical Grid Load Map</span>
+      <div class="bg-black p-1 rounded-lg border border-base-300 shadow-xl">
+        <canvas id="gridCanvas" width="400" height="400" class="block rounded m-0"></canvas>
+      </div>
+    </div>
+
+    <!-- Analytics Canvas -->
+    <div class="flex flex-col items-center gap-2">
+      <span class="text-xs font-bold uppercase tracking-wider opacity-60">Blackout Size Distribution</span>
+      <div class="bg-black p-1 rounded-lg border border-base-300 shadow-xl">
+        <canvas id="blackoutChart" width="400" height="400" class="block rounded m-0"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Real-time Stats Footer -->
+  <div class="bg-base-100 p-4 rounded-lg border border-base-300 shadow-md flex justify-between items-center font-mono text-xs w-full">
+    <div>
+      <span class="opacity-60">Grid Status: </span>
+      <span id="grid-status" class="text-success font-bold">OPERATIONAL</span>
+    </div>
+    <div>
+      <span class="opacity-60">Cascades Logged: </span>
+      <span id="cascade-count" class="font-bold">0</span>
+    </div>
+    <div>
+      <span class="opacity-60">Max Blackout: </span>
+      <span id="max-blackout" class="text-error font-bold">0 hubs</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  const canvasG = document.getElementById('gridCanvas') as HTMLCanvasElement;
+  const canvasC = document.getElementById('blackoutChart') as HTMLCanvasElement;
+
+  if (canvasG && canvasC) {
+    const ctxG = canvasG.getContext('2d')!;
+    const ctxC = canvasC.getContext('2d')!;
+
+    const GRID_SIZE = 50; // 50x50 gives larger, more visible power hubs
+    const CELL_SIZE = canvasG.width / GRID_SIZE;
+
+    // States & Balance Parameters
+    const MAX_LOAD = 4; // Crucial: Hubs blow up if load exceeds this
+    const LOAD_GROWTH = 0.0004; // p: How fast demand increases
+    const ACCIDENTAL_TRIP = 0.00002; // f: Random grid failures
+
+    // Grid tracking: stores a number 0 to 4 (Load), -1 means FAILED/BLACKOUT
+    let grid = Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(0));
+    let nextGrid = Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(0));
+
+    // Stats
+    let blackoutSizes: number[] = [];
+    let currentCascadeSize = 0;
+    let isCascading = false;
+
+    const statusEl = document.getElementById('grid-status');
+    const countEl = document.getElementById('cascade-count');
+    const maxEl = document.getElementById('max-blackout');
+
+    function runGridStep() {
+    let gridIsStrained = false;
+
+    // 1. Applica la crescita del carico e i guasti casuali isolati
+    for (let x = 0; x < GRID_SIZE; x++) {
+        for (let y = 0; y < GRID_SIZE; y++) {
+        let load = grid[x][y];
+
+        if (load === -1) {
+            // I nodi spenti hanno una chance di ripartire puliti
+            if (Math.random() < 0.02) grid[x][y] = 0;
+        } else {
+            // Aumento della richiesta elettrica
+            if (Math.random() < LOAD_GROWTH && grid[x][y] < MAX_LOAD) {
+            grid[x][y]++;
+            }
+            // Guasto casuale (es. albero sulla linea) -> lo portiamo subito a MAX_LOAD + 1 per innescare la cascata
+            if (Math.random() < ACCIDENTAL_TRIP) {
+            grid[x][y] = MAX_LOAD + 1;
+            }
+            if (grid[x][y] >= MAX_LOAD) gridIsStrained = true;
+        }
+        }
+    }
+
+    // 2. IL VERO EFFETTO CASCATA (Gestito con una coda di propagazione immediata)
+    let queue: {x: number, y: number}[] = [];
+    let failuresThisTurn = 0;
+
+    // Troviamo i nodi che sono sovraccarichi in questo momento
+    for (let x = 0; x < GRID_SIZE; x++) {
+        for (let y = 0; y < GRID_SIZE; y++) {
+        if (grid[x][y] > MAX_LOAD) {
+            queue.push({x, y});
+        }
+        }
+    }
+
+    // Processiamo la reazione a catena finché ci sono nodi che esplodono
+    while (queue.length > 0) {
+        const current = queue.shift()!;
+        
+        // Se è già esploso in questo calcolo, saltalo
+        if (grid[current.x][current.y] === -1) continue; 
+
+        // Il nodo salta: si spegne (blackout)
+        grid[current.x][current.y] = -1;
+        failuresThisTurn++;
+
+        // Direzioni dei 4 vicini (sopra, sotto, sinistra, destra)
+        const neighbors = [
+        {x: current.x - 1, y: current.y},
+        {x: current.x + 1, y: current.y},
+        {x: current.x, y: current.y - 1},
+        {x: current.x, y: current.y + 1}
+        ];
+
+        neighbors.forEach(n => {
+        // Verifica i confini della griglia
+        if (n.x >= 0 && n.x < GRID_SIZE && n.y >= 0 && n.y < GRID_SIZE) {
+            // Se il vicino è attivo e non è già spento...
+            if (grid[n.x][n.y] !== -1) {
+            // Riceve il carico del nodo appena fallito
+            grid[n.x][n.y] += 2; 
+
+            // SE IL NUOVO CARICO SUPERA IL LIMITE, ENTRA IN CODA PER ESPLODERE!
+            if (grid[n.x][n.y] > MAX_LOAD) {
+                queue.push({x: n.x, y: n.y});
+            }
+            }
+        }
+        });
+    }
+
+    // 3. Monitoraggio Statistiche
+    if (failuresThisTurn > 0) {
+        blackoutSizes.push(failuresThisTurn);
+        if (countEl) countEl.innerText = blackoutSizes.length.toString();
+        
+        const max = Math.max(...blackoutSizes);
+        if (maxEl) maxEl.innerText = `${max} nodi`;
+        drawChart();
+    }
+
+    // 4. Aggiornamento Messaggi UI
+    if (statusEl) {
+        if (failuresThisTurn > 10) { // Se saltano più di 10 nodi insieme è un blackout pesante
+        statusEl.innerText = "COLLASSO A CASCATA RILEVATO";
+        statusEl.className = "text-error font-bold animate-pulse";
+        } else if (gridIsStrained) {
+        statusEl.innerText = "CARICO CRITICO (Rete Stabile)";
+        statusEl.className = "text-warning font-bold";
+        } else {
+        statusEl.innerText = "OPERATIVO";
+        statusEl.className = "text-success font-bold";
+        }
+    }
+
+    // 5. Rendering Grafico
+    ctxG.clearRect(0, 0, canvasG.width, canvasG.height);
+    for (let x = 0; x < GRID_SIZE; x++) {
+        for (let y = 0; y < GRID_SIZE; y++) {
+        let val = grid[x][y];
+
+        if (val === -1) {
+            ctxG.fillStyle = '#111827'; // Blackout totale (Grigio scuro/Nero)
+        } else {
+            // Colori dinamici: da blu (carico 0) a arancione acceso (carico 4)
+            const intensity = Math.min(val / MAX_LOAD, 1);
+            const r = Math.floor(intensity * 245);
+            const g = Math.floor((1 - intensity) * 150) + 40;
+            const b = Math.floor((1 - intensity) * 255);
+            ctxG.fillStyle = `rgb(${r}, ${g}, ${b})`;
+        }
+
+        ctxG.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE - 0.5, CELL_SIZE - 0.5);
+        }
+    }
+
+    requestAnimationFrame(runGridStep);
+    }
+
+    function drawChart() {
+      ctxC.clearRect(0, 0, canvasC.width, canvasC.height);
+      ctxC.strokeStyle = '#374151';
+      ctxC.strokeRect(40, 40, 320, 320);
+
+      ctxC.fillStyle = '#9ca3af';
+      ctxC.font = '10px monospace';
+      ctxC.textAlign = 'center';
+      ctxC.fillText("History of Blackout Sizes", 200, 25);
+
+      if (blackoutSizes.length === 0) return;
+
+      // Render simple sequential history bars showing the size volatility
+      const maxVal = Math.max(...blackoutSizes, 10);
+      const barWidth = 320 / Math.min(blackoutSizes.length, 60);
+      const displayData = blackoutSizes.slice(-60);
+
+      displayData.forEach((size, i) => {
+        const barHeight = (size / maxVal) * 320;
+        ctxC.fillStyle = size > 50 ? '#ef4444' : '#3b82f6';
+        ctxC.fillRect(40 + (i * barWidth), 360 - barHeight, barWidth - 1, barHeight);
+      });
+    }
+
+    drawChart();
+    requestAnimationFrame(runGridStep);
+  }
+</script>

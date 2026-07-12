@@ -1,0 +1,37 @@
+---
+title: "Forest Fire Model"
+description: "A dynamic simulation based on Self-Organized Criticality. How a simple forest struck by lightning naturally generates a Pareto distribution."
+badge: "Active"
+status: "active"
+draft: false
+---
+
+import ForestFire from '../../components/lab/ForestFire.astro';
+
+In nature, many complex phenomena do not follow a standard, symmetrical Gaussian curve. Instead, they follow a **Pareto distribution**: small events are incredibly common, while cataclysms are rare but inevitable.
+
+In physics, this balance is part of a concept called **Self-Organized Criticality**. When a system is at this "sweet spot," small disruptions happen constantly, medium ones happen occasionally, and massive disasters are rare but still possible. 
+
+### Live Simulation
+In this simulation, the whole ecosystem is controlled by two numbers: the speed at which trees grow ($p$) and how often lightning strikes ($f$). 
+
+A nice sweet spot for a balanced simulation is the following:
+* **Tree Growth Rate ($p$):** $0.0003$ (Trees grow slowly)
+* **Lightning Frequency ($f$):** $0.00005$ (Lightning strikes even more rarely)
+
+This specific combination achieves the following:
+* Because trees grow slowly, they don't clog up the whole map into a solid block of green. Instead, they form organic, scattered groves with natural firebreaks between them.
+* Because lightning strikes rarely, trees have just enough time to gather into distinct shapes. When a fire *does* catch, it burns through its local grove and stops right at the edge. The size of the fire perfectly mirrors the shape of the grove it grew in.
+
+Watch the simulation run in real time below. The first box shows the forest itself. The second box tracks the data: it maps the size of every fire. A pattern quickly emerge: a massive flood of tiny fires, a handful of medium ones, and almost no giant ones. Change the parameters to see how the picture change, note in particular how lowering the lightning probability causes bigger fires, this is something reflecting in the real world: firefighters sometimes let small fires burn to avoid greater disasters to happen.
+
+<ForestFire />
+
+### How the Simulation Works
+
+Every single square on the grid follows four simple rules on every tick of the clock:
+
+1. **Growth:** An empty square has a tiny chance $p$ of growing a tree.
+2. **Spontaneous Spark:** A lone tree has an even tinier chance $f$ of being hit by random lightning.
+3. **Catching Fire:** If a tree is touching *any* neighbor that is currently on fire (up, down, left, or right), it instantly catches fire too.
+4. **Burnout:** A burning square burns out on the next turn, leaving behind an empty space where new life can eventually grow.

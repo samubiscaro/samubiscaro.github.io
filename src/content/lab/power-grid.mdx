@@ -1,0 +1,30 @@
+---
+title: "Power Grid Vulnerability & Cascading Failures"
+description: "See how small overloads can cascade across an electrical infrastructure, showing why real-world power grids break down."
+badge: "New"
+status: "idea"
+draft: true
+---
+
+import PowerGrid from '../../components/lab/PowerGrid.astro';
+
+When you plug in your phone or flip on a light switch, you expect the power to flow instantly. But behind your wall outlets sits the largest machine ever built by humanity: the electrical grid. 
+
+Just like our forest fire project, power grids live right at the edge of balance. To stay efficient, they operate near their maximum limits. But this efficiency creates a huge risk. If a single transformer drops offline, its electricity doesn't vanish—it gets pushed to adjacent power lines. If those lines are already full, they trip too, sparking a domino effect known as a **Cascading Blackout**.
+
+### The Rules of the Infrastructure
+
+In this simulation, the power system is modeled by two primary parameters operating over a web of interconnected hubs:
+* **Demand Growth ($p$):** As populations run air conditioners and factories operate, electrical load naturally builds up in random areas.
+* **Accidental Trip ($f$):** Random real-world accidents (lightning strikes, hardware wear, or fallen trees) will instantly knock a single hub offline.
+
+When a hub's stress color passes **Orange** and hits its maximum threshold, it overloads (**Bright Red**). It instantly dumps its entire electrical volume onto its surrounding neighbors. If the surrounding grid is already heavily strained, you will watch a massive chain reaction tear through the system until it hits a pocket of the grid with empty capacity to absorb the shock.
+
+### Live Cascade Simulation
+
+Observe the power grid below. Look for the tense moments when the map shifts from deep blue to bright orange—setting up the perfect condition for a single random spark to trigger a massive black spatial wave.
+
+<PowerGrid />
+
+### What This Teaches Us About Real Blackouts
+This simulation mirrors the famous **Northeast Blackout of 2003**, where a single power line hitting a tree branch in Ohio caused a massive cascading shutdown that eventually cut power to over 50 million people across North America. It demonstrates that you don't need a massive system-wide attack to crash a grid; you just need a normal system running too close to its critical threshold.

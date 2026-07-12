@@ -1,0 +1,288 @@
+---
+// src/components/lab/ForestFire.astro
+---
+
+<div class="flex flex-col gap-6 bg-base-200 p-6 rounded-xl border border-base-300 my-6 shadow-sm not-prose w-full">
+  
+  <!-- Interactive Workspaces -->
+  <div class="flex flex-wrap gap-6 justify-center w-full">
+    
+    <!-- Simulation Screen -->
+    <div class="flex flex-col items-center gap-2">
+      <span class="text-xs font-bold uppercase tracking-wider opacity-60">Cellular Automaton Grid</span>
+      <div class="bg-black p-1 rounded-lg border border-base-300 shadow-xl">
+        <canvas id="forestCanvas" width="400" height="400" class="block rounded m-0"></canvas>
+      </div>
+    </div>
+
+    <!-- Live Power-Law Analytics Dashboard -->
+    <div class="flex flex-col items-center gap-2">
+      <span class="text-xs font-bold uppercase tracking-wider opacity-60">Frequency & Log-Log Analysis</span>
+      <div class="bg-black p-1 rounded-lg border border-base-300 shadow-xl">
+        <canvas id="analyticsCanvas" width="400" height="400" class="block rounded m-0"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Control panel & Sliders -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 bg-base-100 p-5 rounded-lg border border-base-300 shadow-md w-full">
+    
+    <!-- Sliders -->
+    <div class="md:col-span-2 flex flex-col justify-center gap-4">
+      <div>
+        <div class="flex justify-between text-xs font-semibold mb-2">
+          <label id="label-p" class="opacity-80">Tree Growth Rate ($p$): 0.0003</label>
+          <span class="text-primary font-mono text-[11px]">Slower growth preserves isolated clusters</span>
+        </div>
+        <input type="range" id="param-p" min="0.0001" max="0.0020" step="0.0001" value="0.0003" class="range range-primary range-sm w-full" />
+      </div>
+
+      <div>
+        <div class="flex justify-between text-xs font-semibold mb-2">
+          <label id="label-f" class="opacity-80">Lightning Strike Frequency ($f$): 0.00005</label>
+          <span class="text-secondary font-mono text-[11px]">Fires strike sparingly ($f \ll p$)</span>
+        </div>
+        <input type="range" id="param-f" min="0.00001" max="0.00020" step="0.00001" value="0.00005" class="range range-secondary range-sm w-full" />
+      </div>
+    </div>
+
+    <!-- Live Event Log panel -->
+    <div class="bg-base-300 p-4 rounded-md font-mono text-xs border-l-4 border-error flex flex-col justify-between">
+      <div>
+        <span class="font-bold block mb-2 opacity-60 uppercase tracking-wider">Statistical Logs:</span>
+        <div id="log-incendi" class="space-y-1 opacity-90 max-h-24 overflow-y-auto">Simulating timeline...</div>
+      </div>
+      <div class="text-[10px] opacity-40 mt-2 text-right">Data resets automatically on parameter change.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const simCanvas = document.getElementById('forestCanvas') as HTMLCanvasElement;
+  const chartCanvas = document.getElementById('analyticsCanvas') as HTMLCanvasElement;
+  
+  if (simCanvas && chartCanvas) {
+    const ctxS = simCanvas.getContext('2d')!;
+    const ctxC = chartCanvas.getContext('2d')!;
+
+    const GRID_SIZE = 100;
+    const CELL_SIZE = simCanvas.width / GRID_SIZE;
+
+    // States
+    const EMPTY = 0;
+    const TREE = 1;
+    const FIRE = 2;
+
+    // Your exact tuned constants set as default base values
+    let p = 0.0003;
+    let f = 0.00005;
+
+    // Seed initial grid sparsely at 15% capacity so it starts at a healthy state
+    let grid = Array(GRID_SIZE).fill(null).map(() => 
+      Array(GRID_SIZE).fill(null).map(() => Math.random() < 0.15 ? TREE : EMPTY)
+    );
+    let nextGrid = Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(EMPTY));
+
+    let currentFireSize = 0;
+    let isFireActive = false;
+    
+    // Statistical metrics tracking
+    let fireSizes: number[] = [];
+    let sizeCounts = new Map<number, number>(); 
+    let maxObservedSize = 1;
+    let maxObservedCount = 1;
+
+    const inputP = document.getElementById('param-p') as HTMLInputElement;
+    const inputF = document.getElementById('param-f') as HTMLInputElement;
+    const labelP = document.getElementById('label-p');
+    const labelF = document.getElementById('label-f');
+    const logIncendi = document.getElementById('log-incendi');
+
+    function resetStatistics() {
+      fireSizes = [];
+      sizeCounts.clear();
+      maxObservedSize = 1;
+      maxObservedCount = 1;
+      
+      // Clear and re-seed layout sparsely on changes to clear out clogged clusters
+      grid = Array(GRID_SIZE).fill(null).map(() => 
+        Array(GRID_SIZE).fill(null).map(() => Math.random() < 0.15 ? TREE : EMPTY)
+      );
+      nextGrid = Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(EMPTY));
+      
+      if (logIncendi) logIncendi.innerHTML = `<span class="text-warning">Parameters shifted. Cache flushed.</span>`;
+      drawAnalytics();
+    }
+
+    inputP?.addEventListener('input', (e) => {
+      p = parseFloat((e.target as HTMLInputElement).value);
+      if (labelP) labelP.innerText = `Tree Growth Rate (p): ${p.toFixed(4)}`;
+      resetStatistics();
+    });
+
+    inputF?.addEventListener('input', (e) => {
+      f = parseFloat((e.target as HTMLInputElement).value);
+      if (labelF) labelF.innerText = `Lightning Strike Frequency (f): ${f.toFixed(5)}`;
+      resetStatistics();
+    });
+
+    function recordFireData(size: number) {
+      if (size <= 0) return;
+      
+      fireSizes.push(size);
+      const newCount = (sizeCounts.get(size) || 0) + 1;
+      sizeCounts.set(size, newCount);
+
+      if (size > maxObservedSize) maxObservedSize = size;
+      if (newCount > maxObservedCount) maxObservedCount = newCount;
+
+      if (logIncendi) {
+        const total = fireSizes.length;
+        logIncendi.innerHTML = `
+          Total Fires Logged: <strong>${total}</strong><br/>
+          Max Fire Size: <strong>${maxObservedSize}</strong> cells<br/>
+          Latest Impact: <span class="text-error font-bold">${size}</span>
+        `;
+      }
+    }
+
+    function drawAnalytics() {
+      ctxC.clearRect(0, 0, chartCanvas.width, chartCanvas.height);
+      const w = chartCanvas.width;
+      const h = chartCanvas.height;
+      const pad = 45;
+
+      // Draw Chart Boundary Blocks
+      ctxC.strokeStyle = '#374151';
+      ctxC.lineWidth = 1;
+      ctxC.beginPath();
+      ctxC.rect(pad, pad, w - 2 * pad, h / 2 - pad - 10); // Linear Graph Box
+      ctxC.rect(pad, h / 2 + 20, w - 2 * pad, h / 2 - pad - 10); // Log-Log Graph Box
+      ctxC.stroke();
+
+      // Text Setup
+      ctxC.fillStyle = '#9ca3af';
+      ctxC.font = '10px monospace';
+      ctxC.textAlign = 'center';
+
+      ctxC.fillText("Linear Distribution Plot", w / 2, 25);
+      ctxC.fillText("Log-Log Distribution (Pareto Scatter)", w / 2, h / 2 + 12);
+
+      if (sizeCounts.size === 0) {
+        ctxC.fillStyle = '#4b5563';
+        ctxC.fillText("Awaiting fires to gather statistics...", w / 2, h / 4 + 10);
+        ctxC.fillText("Awaiting fires to gather statistics...", w / 2, 3 * h / 4);
+        return;
+      }
+
+      const topPlotH = h / 2 - pad - 10;
+      const topPlotYStart = pad + topPlotH;
+      const bottomPlotH = h / 2 - pad - 10;
+      const bottomPlotYStart = h / 2 + 20 + bottomPlotH;
+      const plotW = w - 2 * pad;
+
+      const sortedSizes = Array.from(sizeCounts.keys()).sort((a, b) => a - b);
+      const logMaxX = Math.log10(maxObservedSize || 10);
+      const logMaxY = Math.log10(maxObservedCount || 10);
+
+      // --- 1. RENDER TOP LINEAR PLOT ---
+      ctxC.strokeStyle = '#3b82f6';
+      ctxC.lineWidth = 1.5;
+      ctxC.beginPath();
+      sortedSizes.forEach((size, index) => {
+        const count = sizeCounts.get(size)!;
+        const x = pad + (size / maxObservedSize) * plotW;
+        const wY = topPlotYStart - (count / maxObservedCount) * topPlotH;
+        if (index === 0) ctxC.moveTo(x, wY); else ctxC.lineTo(x, wY);
+      });
+      ctxC.stroke();
+
+      // --- 2. RENDER BOTTOM SCATTER LOG-LOG PLOT ---
+      sortedSizes.forEach((size) => {
+        const count = sizeCounts.get(size)!;
+        
+        const logX = Math.log10(size);
+        const logY = Math.log10(count);
+
+        const xPct = logMaxX > 0 ? logX / logMaxX : 0;
+        const yPct = logMaxY > 0 ? logY / logMaxY : 0;
+
+        const x = pad + xPct * plotW;
+        const y = bottomPlotYStart - yPct * bottomPlotH;
+
+        // Scatter dots circle layout for pure critical slope verification
+        ctxC.fillStyle = '#a855f7';
+        ctxC.beginPath();
+        ctxC.arc(x, y, 2.5, 0, 2 * Math.PI);
+        ctxC.fill();
+      });
+    }
+
+    function updateAndRenderSim() {
+      let fireBurningThisTurn = false;
+      let treesBurnedThisStep = 0;
+
+      for (let x = 0; x < GRID_SIZE; x++) {
+        for (let y = 0; y < GRID_SIZE; y++) {
+          let currentState = grid[x][y];
+
+          if (currentState === FIRE) {
+            nextGrid[x][y] = EMPTY;
+            treesBurnedThisStep++;
+          } else if (currentState === EMPTY) {
+            nextGrid[x][y] = Math.random() < p ? TREE : EMPTY;
+          } else if (currentState === TREE) {
+            let neighborOnFire = 
+              (x > 0 && grid[x-1][y] === FIRE) ||
+              (x < GRID_SIZE - 1 && grid[x+1][y] === FIRE) ||
+              (y > 0 && grid[x][y-1] === FIRE) ||
+              (y < GRID_SIZE - 1 && grid[x][y+1] === FIRE);
+
+            if (neighborOnFire) {
+              nextGrid[x][y] = FIRE;
+              fireBurningThisTurn = true;
+            } else {
+              nextGrid[x][y] = Math.random() < f ? FIRE : TREE;
+              if (nextGrid[x][y] === FIRE) fireBurningThisTurn = true;
+            }
+          }
+        }
+      }
+
+      if (fireBurningThisTurn) {
+        isFireActive = true;
+        currentFireSize += treesBurnedThisStep;
+      } else if (isFireActive) {
+        currentFireSize += treesBurnedThisStep;
+        recordFireData(currentFireSize);
+        currentFireSize = 0;
+        isFireActive = false;
+        drawAnalytics();
+      }
+
+      let temp = grid;
+      grid = nextGrid;
+      nextGrid = temp;
+
+      // Draw Simulation Viewport
+      ctxS.clearRect(0, 0, simCanvas.width, simCanvas.height);
+      for (let x = 0; x < GRID_SIZE; x++) {
+        for (let y = 0; y < GRID_SIZE; y++) {
+          if (grid[x][y] === TREE) {
+            ctxS.fillStyle = '#059669'; // Forest Green
+            ctxS.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE - 0.3, CELL_SIZE - 0.3);
+          } else if (grid[x][y] === FIRE) {
+            ctxS.fillStyle = '#dc2626'; // Hot Scarlet
+            ctxS.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+          }
+        }
+      }
+
+      requestAnimationFrame(updateAndRenderSim);
+    }
+
+    // Initialize UI and run frame updates
+    drawAnalytics();
+    requestAnimationFrame(updateAndRenderSim);
+  }
+</script>

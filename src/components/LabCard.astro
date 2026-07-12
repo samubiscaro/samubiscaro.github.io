@@ -1,0 +1,45 @@
+---
+// src/components/LabCard.astro
+interface Props {
+  title: string;
+  desc: string;
+  id: string; // Updated from slug to id to match Content Layer API
+  badge: string;
+  status: 'active' | 'wip' | 'idea';
+}
+
+const { title, desc, id, badge, status } = Astro.props;
+
+const isActive = status === 'active';
+
+// Dynamic DaisyUI badge styling mapping
+const badgeColors = {
+  active: 'badge-accent',
+  wip: 'badge-primary',
+  idea: 'badge-secondary',
+};
+---
+
+<a 
+  href={isActive ? `/lab/${id}` : '#'} 
+  class={`block bg-base-200 p-6 rounded-xl border border-base-300 transition-all shadow-sm group flex flex-col justify-between ${
+    isActive 
+      ? 'hover:bg-base-300 hover:border-base-content/20' 
+      : 'opacity-60 pointer-events-none'
+  }`}
+>
+  <div>
+    <div class="flex justify-between items-start gap-2 mb-2">
+      <h2 class="text-xl font-bold text-secondary group-hover:text-primary transition-colors line-clamp-2">
+        {title}
+      </h2>
+      <span class={`badge ${badgeColors[status]} shrink-0 text-xs font-semibold`}>
+        {badge}
+      </span>
+    </div>
+    <p class="text-sm text-base-content/80 line-clamp-3">
+      {desc}
+    </p>
+  </div>
+  <div class="text-xs opacity-40 mt-4 font-mono">/lab/{id}</div>
+</a>
