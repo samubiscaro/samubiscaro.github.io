@@ -29,10 +29,11 @@
         <span id="spotify-artist" class="text-[11px] opacity-60 italic leading-tight line-clamp-1"></span>
       </div>
 
-      <div class="flex gap-[2px] items-end h-3 w-4 flex-shrink-0 mb-1">
-        <div class="w-[2.5px] bg-primary animate-[music-bar_0.8s_ease-in-out_infinite]"></div>
-        <div class="w-[2.5px] bg-primary animate-[music-bar_1.2s_ease-in-out_infinite]"></div>
-        <div class="w-[2.5px] bg-primary animate-[music-bar_1.0s_ease-in-out_infinite]"></div>
+      <div class="spotify-equalizer text-primary" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
       </div>
 
     </div>
@@ -67,9 +68,47 @@
     display: none; /* Tailwind lo gestisce già, ma per sicurezza */
   }
 
-  @keyframes music-bar {
-    0%, 100% { height: 25%; }
-    50% { height: 100%; }
+  .spotify-equalizer {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    width: 18px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  .spotify-equalizer > span {
+    width: 3px;
+    height: 14px;
+    border-radius: 3px;
+    background: currentColor;
+    transform-origin: center;
+    animation: spotify-equalizer 1.2s ease-in-out infinite;
+  }
+
+  .spotify-equalizer > span:nth-child(2) {
+    animation-delay: -0.6s;
+    animation-duration: 1s;
+  }
+
+  .spotify-equalizer > span:nth-child(3) {
+    animation-delay: -0.2s;
+    animation-duration: 1.4s;
+  }
+
+  .spotify-equalizer > span:nth-child(4) {
+    animation-delay: -0.8s;
+  }
+
+  @keyframes spotify-equalizer {
+    0%, 100% { transform: scaleY(0.35); }
+    50% { transform: scaleY(1); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .spotify-equalizer > span {
+      animation: none;
+    }
   }
 
 </style>
@@ -207,47 +246,4 @@ function updateDOM(data) {
   
 </script>
 
-<!--
-<script>
-  async function updateSpotify() {
-    const container = document.getElementById('spotify-container');
-    const art = document.getElementById('spotify-art') as HTMLImageElement;
-    const title = document.getElementById('spotify-title');
-    const artist = document.getElementById('spotify-artist');
-    const link = document.getElementById('spotify-link-element') as HTMLAnchorElement;
-    // SOSTITUISCI CON IL TUO URL DI VERCEL UNA VOLTA DEPLOYATO
-    const VERCEL_URL = 'https://test-spotify.free.beeceptor.com/api/now-playing';
 
-    // Se il container non esiste ancora, esci silenziosamente
-    if (!container ||!art || !title || !artist || !link) return;
-
-    try {
-      const res = await fetch(VERCEL_URL);
-      const data = await res.json();
-
-      if (data.isPlaying) {
-        container.classList.remove('hidden');
-        if (data.albumArt) {
-          art.src = data.albumArt;
-          art.classList.remove('hidden');
-        } else {
-          // Se non c'è, nascondi l'elemento <img>
-          art.classList.add('hidden');
-        }
-        art.src = data.albumArt;
-        title.innerText = data.title;
-        artist.innerText = data.artist;
-        link.href = data.songUrl;
-      } else {
-        container.classList.add('hidden');
-      }
-    } catch (e) {
-      console.error("Spotify Widget Error", e);
-    }
-  }
-
-  // Aggiorna ogni 30 secondi
-  updateSpotify();
-  setInterval(updateSpotify, 30000);
-</script>
--->
