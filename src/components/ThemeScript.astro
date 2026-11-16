@@ -1,0 +1,49 @@
+<!-- Apply the theme before the page paints, then keep it across Astro navigation. -->
+<script is:inline>
+  (() => {
+    if (window.__siteThemeInitialized) return;
+    window.__siteThemeInitialized = true;
+
+    const storageKey = 'theme';
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
+    const validTheme = (value) => value === 'winter' || value === 'night';
+    let preference = null;
+    try {
+      const saved = localStorage.getItem(storageKey);
+      if (validTheme(saved)) preference = saved;
+    } catch {
+      // The toggle still works when browser storage is unavailable.
+    }
+
+    function applyTheme(target = document) {
+      const theme = preference || (systemTheme.matches ? 'night' : 'winter');
+      const dark = theme === 'night';
+      target.documentElement.dataset.theme = theme;
+      target.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+      target.querySelectorAll('[data-theme-toggle]').forEach((button) => {
+        button.setAttribute('aria-checked', String(dark));
+        button.setAttribute('title', dark ? 'Switch to light mode' : 'Switch to dark mode');
+        button.hidden = false;
+      });
+    }
+
+    applyTheme();
+    document.addEventListener('DOMContentLoaded', () => applyTheme());
+    document.addEventListener('astro:before-swap', (event) => applyTheme(event.newDocument));
+    document.addEventListener('astro:after-swap', () => applyTheme());
+    document.addEventListener('click', (event) => {
+      if (!(event.target instanceof Element) || !event.target.closest('[data-theme-toggle]')) return;
+      preference = document.documentElement.dataset.theme === 'night' ? 'winter' : 'night';
+      try { localStorage.setItem(storageKey, preference); } catch {}
+      applyTheme();
+    });
+    systemTheme.addEventListener('change', () => {
+      if (!preference) applyTheme();
+    });
+    window.addEventListener('storage', (event) => {
+      if (event.key !== storageKey && event.key !== null) return;
+      preference = validTheme(event.newValue) ? event.newValue : null;
+      applyTheme();
+    });
+  })();
+</script>

@@ -1,3 +1,7 @@
+---
+import ThemeToggle from "./ThemeToggle.astro";
+---
+
 <!-- only necessary if too many menu items exist
 <div
     class="block sticky pointer-events-none bottom-10 bg-base-200 justify-center h-12 [mask-image:linear-gradient(transparent,#000000)]"
@@ -6,7 +10,7 @@
 
 -->
 
-<div class="social-icons px-4 pb-5 pt-1 flex self-center justify-center sticky bottom-0 bg-base-200">
+<div class="social-icons w-full px-4 pb-5 pt-1 grid grid-cols-[1fr_auto_1fr] items-center sticky bottom-0 bg-base-200">
     <!--
 	<a
         href="https://manuelernestog.github.io/support-my-work/"
@@ -33,7 +37,7 @@
     <a 
       href="https://github.com/samubiscaro" 
       target="_blank" 
-      class="mx-3 transition-all duration-300 hover:text-primary hover:scale-110" 
+      class="col-start-2 mx-3 transition-all duration-300 hover:text-primary hover:scale-110"
       aria-label="Github" 
       title="Github"
     >
@@ -96,4 +100,7 @@
         </svg>
     </a>
 -->
+    <div class="hidden lg:block col-start-3 justify-self-end">
+      <ThemeToggle variant="icon" />
+    </div>
 </div>
