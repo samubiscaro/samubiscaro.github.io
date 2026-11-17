@@ -8,30 +8,40 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       <div class="max-w-2xl">
         <h1 class="text-5xl font-extrabold tracking-tight mb-2">Samuele Biscaro</h1>
         <h2 class="text-primary text-2xl font-semibold opacity-90">
-          Mathematics Master's Student @ SNS & UNIPI
+          PhD Candidate in Mathematics @ University of Basel
         </h2>
         <div class="py-6 text-lg leading-relaxed">
           <p>
-            Welcome to my webpage ! :)
-            <br><br>
-            Hi, I’m Samuele, a mathematics student currently pursuing a Master's degree at the 	<strong>Scuola Normale Superiore (SNS)</strong> and the <strong>University of Pisa (UNIPI)</strong>.
+            Hi, I’m Samuele! I’m a PhD candidate in mathematics at the <strong>University of Basel</strong>, supervised by <strong>Prof. Gianluca Crippa</strong>.
           </p>
           <p class="mt-4">
-            On this website, you’ll find an evolving collection of my projects and materials I’ve gathered throughout my studies. 
+            I completed my master’s degree in mathematics at the <strong>University of Pisa</strong> in 2026, alongside my studies at the <strong>Scuola Normale Superiore (SNS)</strong>. During 2025–2026, I also spent a semester on exchange at the <strong>University of Zürich</strong>, taking courses there and at <strong>ETH Zürich</strong>.
+          </p>
+          <p class="mt-4">
+            On this website, you’ll find my mathematical projects and an evolving collection
+            of notes and materials from my studies.
           </p>
         </div>
       </div>
-      </div>
+    </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
       <a href="/projects" class="btn btn-outline btn-primary text-lg capitalize">View Projects</a>
       <a href="/notes" class="btn btn-outline btn-primary text-lg capitalize">Study Notes</a>
-      <!-- 
-      <a href="/teaching" class="btn btn-outline btn-primary text-lg capitalize">Teaching / TA</a>
-      -->
     </div>
 
     <div class="divider my-10"></div>
+
+    <section class="mb-10" aria-labelledby="recent-work">
+      <h2 id="recent-work" class="text-2xl font-bold mb-4">Recent work</h2>
+      <a href="/projects/master-thesis" class="block rounded-xl border border-base-300 bg-base-200 p-6 transition-colors hover:border-primary">
+        <p class="text-sm text-base-content/70 mb-2">Master’s thesis · University of Pisa · 2026</p>
+        <h3 class="text-xl font-semibold text-primary">
+          Flow Equation Approach for the Stochastic Navier-Stokes Equations in the Full Subcritical Regime
+        </h3>
+        <p class="mt-3 text-base-content/70">Supervised by Prof. Marco Romito.</p>
+      </a>
+    </section>
 
     <div class="bg-base-200 p-6 rounded-xl border border-base-300">
       <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
@@ -46,29 +56,3 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
   </div>
 </BaseLayout>
-
-<!-- 
-
-<BaseLayout sideBarActiveItemID="home">
-    <div class="pb-12 mt-5">
-    <div><h1 class="text-5xl font-bold">Samuele Biscaro</h1></div>
-
-  <div><h1 class="text-primary text-3xl py-3 font-bold">Mathematics Master's Student</h1></div>
-    <div class="py-2">
-      <text class="text-lg">
-        Welcome to my webpage ! :)
-        <br><br>
-        Hi, I’m Samuele, a mathematics student currently pursuing a Master's degree at the 	<b>Scuola Normale Superiore (SNS)</b> and the <b>University of Pisa (UNIPI)</b>.
-        <br>
-        On this website, you’ll find an evolving collection of my projects and materials I’ve gathered throughout my studies. 
-      </text>
-    </div>
-<div><h1 class="text-primary text-3xl py-3 font-bold">Get in touch</h1></div>
-    <div class="text-lg">
-        <p><b>Email:</b> samuele.biscaro@sns.it</p>
-        </div>
-
-  </div>
-</BaseLayout>
-
--->

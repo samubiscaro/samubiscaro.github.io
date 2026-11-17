@@ -4,71 +4,91 @@ import TimeLineElement from "../components/cv/TimeLine.astro";
 ---
 
 <BaseLayout title="Resume" sideBarActiveItemID="cv">
-  <div>
-    <div><h1 class="text-4xl font-bold mb-5 text-primary">RESUME</h1></div>
-  </div>
+  <h1 class="text-4xl font-bold mb-5 text-primary">RESUME</h1>
 
-  <div class="mb-5">
-    <div class="text-3xl w-full font-bold">Education</div>
-  </div>
+  <section class="mb-10" aria-labelledby="education">
+    <h2 id="education" class="text-3xl font-bold mb-5">Education</h2>
+    <div class="time-line-container grid gap-4">
+      <TimeLineElement
+        title="PhD Candidate in Mathematics"
+        subtitle="2026–present · University of Basel, Switzerland"
+      >
+        <strong>Supervisor:</strong> Prof. Gianluca Crippa.
+      </TimeLineElement>
+      <TimeLineElement
+        title="Master’s Degree in Mathematics"
+        subtitle="2024–2026 · University of Pisa, Italy"
+      >
+        <strong>Thesis:</strong> <a href="/projects/master-thesis" class="link link-primary"><em>Flow Equation Approach for the Stochastic Navier-Stokes Equations in the Full Subcritical Regime</em></a><br />
+        <strong>Supervisor:</strong> Prof. Marco Romito.<br />
+        <strong>Final grade:</strong> 110/110 cum laude.
+      </TimeLineElement>
+      <TimeLineElement
+        title="Degree in Mathematics"
+        subtitle="2021–2026 · Scuola Normale Superiore (SNS), Pisa, Italy"
+      >
+        University institute of higher education admitting 32 pure-science students per year.
+      </TimeLineElement>
+      <TimeLineElement
+        title="SEMP Exchange"
+        subtitle="September 2025–February 2026 · University of Zürich, Switzerland"
+      >
+        Exchange student at the University of Zürich, also taking courses at ETH Zürich.
+      </TimeLineElement>
+      <TimeLineElement
+        title="Bachelor’s Degree in Mathematics"
+        subtitle="2021–2024 · University of Pisa, Italy"
+      >
+        <strong>Thesis:</strong> <a href="/projects/bachelor-thesis" class="link link-primary"><em>A Non-commutative Extension of the Sewing Lemma with Applications to Quantum Mechanics</em></a><br />
+        <strong>Supervisor:</strong> Prof. Dario Trevisan.<br />
+        <strong>Final grade:</strong> 110/110 cum laude.
+      </TimeLineElement>
+      <TimeLineElement
+        title="Diploma of &quot;Esame di Stato&quot;"
+        subtitle="2016–2021 · Liceo Scientifico &quot;Leonardo da Vinci&quot;, Treviso, Italy"
+      >
+        Applied sciences curriculum.<br />
+        <strong>Final grade:</strong> 100/100.
+      </TimeLineElement>
+    </div>
+  </section>
 
-  <div class="time-line-container grid gap-4 mb-10">
-    <TimeLineElement
-      title="Degree in Mathematics"
-      subtitle="2021 to present at Scuola Normale Superiore (SNS), Pisa, Italy."
-    >University institute of higher education admitting 32 science students per year.</TimeLineElement>
-    <TimeLineElement
-      title="Master degree in Mathematics"
-      subtitle="2024 to present at University of Pisa, Italy."
-    > Expected graduation: 2026.</TimeLineElement>
-    <TimeLineElement
-      title="Bachelor's Degree in Mathematics"
-      subtitle="2021 to 2024 at University of Pisa, Italy"
-    >
-      <strong>Thesis:</strong> <em>A Non-commutative Extension of the Sewing Lemma with Applications to Quantum Mechanics</em> <br/>
-      <strong>Supervisor:</strong> Prof. Dario Trevisan.
-    </TimeLineElement>
-    <TimeLineElement
-      title="Diploma of &quot;Esame di Stato&quot;"
-      subtitle="From 2016 to 2021 at Liceo Scientifico &quot;Leonardo da Vinci&quot;, Treviso, Italy."
-    >
-	    Applied sciences curriculum.
-	  </TimeLineElement>
-  </div>
-
-  <div class="mb-5">
-    <div class="text-3xl w-full font-bold">Experience</div>
-  </div>
-
-  <div class="time-line-container mb-10">
-    <TimeLineElement
-      title="Teaching assistant for the Vorkurs"
-      subtitle="2025 at University of Zürich, Switzerland"
-    >
-      Held exercise classes during the Vorkurs, a week of pre-university preparation aimed at
-      future mathematics or physics students. Translation of all the materials from German to
-      Italian.
-    </TimeLineElement>
-	  <TimeLineElement
-      title="Outreach Assistant"
-      subtitle="From 2023 to present at Scuola Normale Superiore, Pisa, Italy"
-    >
-      Conduct presentations at high schools to promote the SNS, engage with students to provide
-		  information and guidance about SNS programs.
-    </TimeLineElement>	
-    <TimeLineElement
-      title="Peer tutoring"
-      subtitle="From 2022 to present at Scuola Normale Superiore and University of Pisa, Italy"
-    >
-      Support and tutoring to both matriculated students and those enrolled in subsequent years.
-    </TimeLineElement>
-  </div>
+  <section class="mb-10" aria-labelledby="experience">
+    <h2 id="experience" class="text-3xl font-bold mb-5">Experience</h2>
+    <div class="time-line-container grid gap-4">
+      <TimeLineElement
+        title="Teaching Assistant for the Vorkurs"
+        subtitle="2025–2026 · University of Zürich, Switzerland"
+      >
+        Held exercise classes during the Vorkurs, a week of pre-university preparation for future mathematics and physics students. Translated all course materials from German into Italian.
+      </TimeLineElement>
+      <TimeLineElement
+        title="Peer Tutoring"
+        subtitle="2024–2026 · Scuola Normale Superiore and University of Pisa, Italy"
+      >
+        Provided support and tutoring to first-year students and students in subsequent years.
+      </TimeLineElement>
+      <TimeLineElement
+        title="High School Tutoring"
+        subtitle="2024–2026 · Scuola Normale Superiore, Pisa, Italy"
+      >
+        Tutored students at Liceo “Galilei” in Pisa, particularly in scientific subjects.
+      </TimeLineElement>
+      <TimeLineElement
+        title="Outreach Assistant"
+        subtitle="2023–2026 · Scuola Normale Superiore, Pisa, Italy"
+      >
+        Gave presentations at high schools to introduce SNS and provided students with information and guidance about its programs.
+      </TimeLineElement>
+    </div>
+  </section>
 
   <div class="mt-10 flex flex-col items-start gap-2">
-    <a 
-      class="btn btn-outline border-primary text-primary hover:bg-primary hover:text-primary-content hover:border-primary transition-all duration-300 px-6" 
-      href="/CV_Biscaro.pdf" 
+    <a
+      class="btn btn-outline border-primary text-primary hover:bg-primary hover:text-primary-content hover:border-primary transition-all duration-300 px-6"
+      href="/CV_Biscaro.pdf"
       target="_blank"
+      rel="noopener"
     >
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-current">
         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -77,10 +97,8 @@ import TimeLineElement from "../components/cv/TimeLine.astro";
       </svg>
       Download Full CV (PDF)
     </a>
-    
     <span class="text-[11px] font-medium uppercase tracking-wider opacity-40 ml-1">
-      Last revised: May 2026
+      PDF · Last revised: May 2026
     </span>
   </div>
-
 </BaseLayout>
